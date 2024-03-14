@@ -404,6 +404,8 @@
     }).done((result) => {
       $(result).each(function(i, e){
         
+        console.log(e);
+        
         e.updatesData = e.updatesData ? e.updatesData : 0;
         e.pageViewsData = e.pageViewsData ? e.pageViewsData : 0;
         e.userViewsData = e.userViewsData ? e.userViewsData : 0;

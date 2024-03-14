@@ -24,6 +24,7 @@ https://developers.google.com/analytics/devguides/reporting/data/v1/api-schema?h
 */
 namespace host\cms\repository;
 
+use Google_Client;
 use Google\Analytics\Data\V1beta\BetaAnalyticsDataClient;
 use Google\Analytics\Data\V1beta\DateRange;
 use Google\Analytics\Data\V1beta\Dimension;
@@ -36,6 +37,7 @@ use Google\Analytics\Data\V1beta\Filter\StringFilter\MatchType;
 class googleAnalyticsDataApiRepository {
   
   public function __construct () {
+    $this->_message = array();
     $this->credentials = null;
     $this->property_id = null;
     $this->rows = array();
@@ -96,13 +98,22 @@ class googleAnalyticsDataApiRepository {
     $report_type = $this->report_type;
     
     if(!$credentials || !$property_id){
-      $this->set_message("認証ファイルまたは、プロパティを登録してください。");
+      $this->_message[] = "認証ファイルまたは、プロパティを登録してください。";
       return $this;
     }
     if (!file_exists($credentials)){
-      $this->set_message("認証ファイルを登録してください。");
+      $this->_message[] = "認証ファイルを登録してください。";
       return $this;
     }
+
+    // Create the client object and set the authorization configuration
+    // from the client_secretes.json you downloaded from the developer console.
+    $client = new Google_Client();
+    // 以下の４行を追記
+    $http = new \GuzzleHttp\Client([
+      'verify' => __DIR__.'/google_client_key_for_php7/google_local_cacert.pem'
+    ]);
+    $client->setHttpClient($http);
 
     // Using a default constructor instructs the client to use the credentials
     // specified in GOOGLE_APPLICATION_CREDENTIALS environment variable.

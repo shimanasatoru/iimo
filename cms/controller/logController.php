@@ -73,8 +73,8 @@ class logController{
       $summaryData[$key]['updatesData'] = $u->counter;
       if(isset($googleData->row)){
         $i = array_search($date, array_column($googleData->row, 'date'), true);
-        $summaryData[$key]['pageViewsData'] = $googleData->row[$i]['pageViews'];
-        $summaryData[$key]['userViewsData'] = $googleData->row[$i]['user'];
+        $summaryData[$key]['pageViewsData'] = $i !== false ? $googleData->row[$i]['pageViews'] : 0;
+        $summaryData[$key]['userViewsData'] = $i !== false ? $googleData->row[$i]['user'] : 0;
       }
     }
     if(@$request['dataType'] == 'json'){
