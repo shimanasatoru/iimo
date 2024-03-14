@@ -1,7 +1,0 @@
-{
-    "require": {
-        "swiftmailer/swiftmailer": "^6.0",
-        "google/analytics-data": "^0.16.2",
-        "google/apiclient": "^2.15"
-    }
-}
