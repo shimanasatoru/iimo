@@ -1,0 +1,12 @@
+
+@media (max-width: 768px) {
+  .table-vertical-order-sm th:not(.table-vertical-order-exclusion){
+    display: inline-block;
+  }
+  
+  .table-vertical-order-sm td:not(.table-vertical-order-exclusion){
+    display: block;
+    width: 90vw;
+  }
+}
+
