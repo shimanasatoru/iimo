@@ -70,6 +70,7 @@ class navigationController{
     
     $n = new navigationRepository;
     $n->setSiteId($_SESSION['site']->id);
+    $n->setReleaseKbn(1);
     $n->setOrder("rank ASC");
     $n->sitemapCreate();
   }
@@ -195,6 +196,11 @@ class navigationController{
         $result = $n->push();
         break;
     }
+    
+    if($result->_status == true){
+      $this->sitemapCreateAction(); //サイトマップ生成
+    }    
+    
     $dataType = filter_input( INPUT_GET, 'dataType', FILTER_SANITIZE_SPECIAL_CHARS);
     if($dataType == 'json'){
       echo json_encode($result, JSON_UNESCAPED_UNICODE);

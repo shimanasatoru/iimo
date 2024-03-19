@@ -267,7 +267,6 @@ class navigationRepository extends dbRepository {
     //サイトマップ、URLを生成
     $this->setSiteId($push->data->site_id);
     $this->directoryPathCreate();
-    $this->sitemapCreate();
     //キャッシュクリア
     $ut->smartyClearAllCache();
     return $this;
@@ -309,7 +308,6 @@ class navigationRepository extends dbRepository {
     //サイトマップ、URLを生成
     $this->setSiteId($push->data->site_id);
     $this->directoryPathCreate();
-    $this->sitemapCreate();
     //キャッシュクリア
     $ut->smartyClearAllCache();    
     return $this;
@@ -421,6 +419,10 @@ class navigationRepository extends dbRepository {
       'http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">';
     if($decode = $this->treeDecode($data)){
       foreach($decode as $d){
+        //リンクフォーマットは除外
+        if($d->format_type == "link"){
+          continue;
+        }
         //(&)はエラーとなるため、一旦&に戻して再置換
         $url = preg_replace('/&/', '&amp;', preg_replace('/&amp;/', '&', $d->url));
         $update_date = date("c",strtotime($d->update_date));
