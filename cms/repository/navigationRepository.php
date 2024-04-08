@@ -47,8 +47,13 @@ class navigationRepository extends dbRepository {
       self::setValue(":site_id", $site_id);
     }
     if($release_kbn = self::getReleaseKbn()){
-      self::setWhere("na.release_kbn = :release_kbn AND (na.release_start_date IS NULL || DATE_FORMAT(now(), '%Y-%m-%d') >= DATE_FORMAT(na.release_start_date, '%Y-%m-%d')) AND (na.release_end_date IS NULL || DATE_FORMAT(now(), '%Y-%m-%d') <= DATE_FORMAT(na.release_end_date, '%Y-%m-%d'))");
-      self::setValue(":release_kbn", $release_kbn);
+      self::setWhere("(na.release_kbn = :release_kbn1 OR na.release_kbn = :release_kbn2) AND (na.release_start_date IS NULL || DATE_FORMAT(now(), '%Y-%m-%d') >= DATE_FORMAT(na.release_start_date, '%Y-%m-%d')) AND (na.release_end_date IS NULL || DATE_FORMAT(now(), '%Y-%m-%d') <= DATE_FORMAT(na.release_end_date, '%Y-%m-%d'))");
+      self::setValue(":release_kbn1", 1);
+      self::setValue(":release_kbn2", 3);
+    }
+    if($release_password = self::getReleasePassword()){
+      self::setWhere("na.release_password = :release_password");
+      self::setValue(":release_password", $release_password);
     }
     $q = self::getSelect().
           self::getFrom().
@@ -62,7 +67,16 @@ class navigationRepository extends dbRepository {
       $stmt->execute(self::getValue());
       $array = array();
       $new = array();
+      $password = $this->getReleasePasswordStatusIds();
       while($d = $stmt->fetch(\PDO::FETCH_OBJ)){
+        $d->release_password_status = null;
+        if($d->release_kbn == 3){
+          if($password && $password[$d->id]){
+            $d->release_password_status = true;
+          }else{
+            $d->release_password_status = false;
+          }
+        }
         if($d->format_type != 'link'){
           $d->url = $d->domain.'/';
           $d->uri = DIR_SITE.($d->site_directory ? $d->site_directory . '/' : null);
@@ -99,6 +113,29 @@ class navigationRepository extends dbRepository {
     }
     return $this;
   }
+  
+  /*
+   * リリース認証
+   * @return object array mixed $this
+   */
+  public function releaseOauth() {
+    $id = $this->getReleaseId();
+    $password = $this->getReleasePassword();
+    if($id && $password){
+      $this->setId($id);
+      $this->setReleasePassword($password);
+      if($data = $this->get()->row[0]){
+        $this->setReleasePasswordStatusId($id, true);
+        $this->set_status(true);
+      }else{
+        $this->setReleasePasswordStatusId($id, false);
+      }
+    }else{
+      $this->setReleasePasswordStatusId($id, false);
+    }
+    return $this;
+  }
+
   /*
    * バックアップ全件取得
    * @return object array mixed $this
@@ -249,7 +286,7 @@ class navigationRepository extends dbRepository {
       }
 
       //複製
-      $stmt = $this->prepare("INSERT INTO navigation_bk ( id, parent_id, site_id, account_id, rank, release_kbn, release_start_date, release_end_date, format_type, format_id, name, catch, comment, meta_description, meta_keywords, directory_name, directory_path, template_name, url, page_limit, delete_kbn, update_date, created_date) ( SELECT * FROM navigation_tbl WHERE id = :id )");
+      $stmt = $this->prepare("INSERT INTO navigation_bk ( id, parent_id, site_id, account_id, rank, release_kbn, release_start_date, release_end_date, release_password, format_type, format_id, name, catch, comment, meta_description, meta_keywords, directory_name, directory_path, template_name, url, page_limit, delete_kbn, update_date, created_date) ( SELECT * FROM navigation_tbl WHERE id = :id )");
       if(!$stmt->execute([
         ':id'=> $this->_lastId
       ])){

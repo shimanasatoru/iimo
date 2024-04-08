@@ -107,6 +107,19 @@ class indexController{
    * @return array $data
    */
   public function pageExists(int $site_id, array $keys, string $columnSearch = 'id'){
+    
+    //ログイン認証ページ
+    $navigation_id = filter_input(INPUT_POST, 'navigation_id', FILTER_VALIDATE_INT);
+    $release_password = filter_input(INPUT_POST, 'release_password', FILTER_SANITIZE_SPECIAL_CHARS);
+    if($navigation_id && $release_password){
+      $n = new navigationRepository;
+      $n->setSiteId($site_id);
+      $n->setReleaseId($navigation_id);
+      $n->setReleasePassword($release_password);
+      $n->releaseOauth();
+    }
+    
+    //ナビゲーション取得
     $n = new navigationRepository;
     $n->setSiteId($site_id);
     if(!$this->getPreviewFlg()){
@@ -128,7 +141,7 @@ class indexController{
       }
       $data = $data->children[$i];
     }
-
+    
     //ページ構成を取得する
     $ps = new pageStructureRepository;
     $ps->setSiteId($site_id);
@@ -146,8 +159,9 @@ class indexController{
       $ps->setId($structure_id);
     }
     $data->structures = $ps->get();
+
+    //モジュールプレビューの場合
     if($module_id = $this->getModuleId()){
-      //モジュールプレビューの場合
       $pm = new pageModuleRepository;
       if($this->getDesignAuthority() != "default"){
         $pm->setSiteId($site_id); //デザイン権限オリジナルならsite_idが必要
@@ -155,7 +169,13 @@ class indexController{
       $pm->setId($module_id);
       $data->structures = $pm->get();
     }
-
+    
+    //公開パスワード判定
+    if($data->release_password_status === false){
+      $data->elements = new \StdClass;
+      return $data;
+    }
+    
     //お問合せデータ取得
     if($data->format_type == 'formFormat'){
       $mf = new mailFormRepository;
@@ -215,7 +235,7 @@ class indexController{
           'options'=> array('default'=>null)
         ],
       ]);
-
+      
       //全文検索
       if(@$request['keyword']){
         $p = new pageRepository;

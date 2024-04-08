@@ -16,8 +16,6 @@
       </div>
     </div>
   </div>
-  
-  {$smarty.session|@print_r}
 
   <!-- Main content -->
   <section id="content" class="content">
@@ -78,21 +76,26 @@
                   {/if}
                 </div>
                 <div class="row">
-                  <div class="col-lg-4 release_kbn form-group">
+                  <div class="col-lg-3 release_kbn form-group">
                     <label>公開</label>
                     <select name="release_kbn" class="form-control form-control-border">
                       <option value="1" {if $data->release_kbn|default == 1}selected{/if}>公開する</option>
                       <option value="2" {if $data->release_kbn|default == 2}selected{/if}>限定公開（非公開、機能のみ公開）</option>
+                      <option value="3" {if $data->release_kbn|default == 3}selected{/if}>パスワード公開する</option>
                       <option value="0" {if !$data->release_kbn|default || $data->release_kbn === 0}selected{/if}>下書き</option>
                     </select>
                   </div>
-                  <div class="col-lg-4 release_start_date form-group">
+                  <div class="col-lg-3 release_start_date form-group">
                     <label>公開開始日</label>
                     <input type="date" name="release_start_date" placeholder="公開開始日" class="form-control" value="{$data->release_start_date|default}" data-inputmask-alias="datetime" data-inputmask-inputformat="yyyy/mm/dd" data-mask>
                   </div>
-                  <div class="col-lg-4 release_end_date form-group">
+                  <div class="col-lg-3 release_end_date form-group">
                     <label>公開終了日</label>
                     <input type="date" name="release_end_date" placeholder="公開終了日" class="form-control" value="{$data->release_end_date|default}" data-inputmask-alias="datetime" data-inputmask-inputformat="yyyy/mm/dd" data-mask>
+                  </div>
+                  <div class="col-lg-3 release_password form-group">
+                    <label>パスワード</label>
+                    <input type="text" name="release_password" placeholder="パスワード" class="form-control" value="{$data->release_password|default}">
                   </div>
                   <div class="col-lg-12 template_name form-group">
                     <label>テンプレートを指定</label>

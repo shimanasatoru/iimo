@@ -78,6 +78,10 @@ trait navigationEntity{
         'filter' => FILTER_VALIDATE_REGEXP,
         'options'=> array('default'=>null, "regexp"=> "/[0-9\-\/]/")
       ],
+      'release_password' => [
+        'filter' => FILTER_SANITIZE_SPECIAL_CHARS,
+        'options'=> array('default'=>null)
+      ],
       'format_type' => [
         'filter' => FILTER_SANITIZE_SPECIAL_CHARS,
         'options'=> array('default'=>null)
@@ -192,6 +196,34 @@ trait navigationEntity{
   }
   public function setReleaseKbn(int $release_kbn) :void{
     $this->release_kbn = $release_kbn;
+  }
+  
+  public $release_id;
+  public function getReleaseId(){
+    return $this->release_id;
+  }
+  public function setReleaseId(int $release_id) :void{
+    $this->release_id = $release_id;
+  }
+  
+  public $release_password;
+  public function getReleasePassword(){
+    return $this->release_password;
+  }
+  public function setReleasePassword(string $release_password) :void{
+    $this->release_password = $release_password;
+  }
+  
+  public $release_password_status_id;
+  public function getReleasePasswordStatusIds(){
+    return $_SESSION["release_password_status_ids"];
+  }
+  public function setReleasePasswordStatusId(int $release_password_status_id, bool $status = false) :void{
+    if($status){
+      $_SESSION["release_password_status_ids"][$release_password_status_id] = true;
+    }else{
+      unset($_SESSION["release_password_status_ids"][$release_password_status_id]);
+    }
   }
   
   /*
