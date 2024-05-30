@@ -3,6 +3,7 @@ namespace host\cms\repository;
 
 use host\cms\repository\dbRepository;
 use host\cms\repository\utilityRepository;
+use host\cms\repository\pageRepository;
 
 class navigationRepository extends dbRepository {
   
@@ -426,6 +427,14 @@ class navigationRepository extends dbRepository {
     $tree = array();
     if($data){
       foreach($data as $d){
+        $d->page_data = array();
+        if($d->id){
+          $pages = new pageRepository;
+          $pages->setNavigationId($d->id);
+          $pages->setPageUrl($d->url);
+          $d->page_data = $pages->get()->row;
+        }
+        
         $tree[] = $d;
         if(property_exists($d, "children") && $d->children){
           $tree = array_merge($tree, $this->treeDecode($d->children));
@@ -434,6 +443,17 @@ class navigationRepository extends dbRepository {
       }
     }
     return $tree;
+  }
+
+  public function sitemapCodeUrlCreate($url, $update_date){
+    //(&)はエラーとなるため、一旦&に戻して再置換
+    $url = preg_replace('/&/', '&amp;', preg_replace('/&amp;/', '&', $url));
+    $update_date = date("c", strtotime($update_date));
+    return 
+      "<url>".
+        "<loc>{$url}</loc>".
+        "<lastmod>{$update_date}</lastmod>".
+      "</url>";
   }
   
   public function sitemapCreate(){
@@ -447,6 +467,7 @@ class navigationRepository extends dbRepository {
     if(!$data[0]->uri){
       return false;
     }
+
     $upload_dir = $data[0]->uri;
     $file_name = "sitemap.xml";
     $code = '<?xml version="1.0" encoding="UTF-8"?>'.
@@ -460,13 +481,12 @@ class navigationRepository extends dbRepository {
         if($d->format_type == "link"){
           continue;
         }
-        //(&)はエラーとなるため、一旦&に戻して再置換
-        $url = preg_replace('/&/', '&amp;', preg_replace('/&amp;/', '&', $d->url));
-        $update_date = date("c",strtotime($d->update_date));
-        $code.= "<url>".
-            "<loc>{$url}</loc>".
-            "<lastmod>{$update_date}</lastmod>".
-          "</url>";
+        $code.= $this->sitemapCodeUrlCreate($d->url, $d->update_date);
+        if($d->page_data){
+          foreach($d->page_data as $p){
+            $code.= $this->sitemapCodeUrlCreate($p->page_url, $p->update_date);
+          }
+        }
       }
     }
     $code.= '</urlset>';
