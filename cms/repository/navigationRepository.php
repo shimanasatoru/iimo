@@ -428,7 +428,7 @@ class navigationRepository extends dbRepository {
     if($data){
       foreach($data as $d){
         $d->page_data = array();
-        if($d->id){
+        if($d->id && $d->url){
           $pages = new pageRepository;
           $pages->setNavigationId($d->id);
           $pages->setPageUrl($d->url);
