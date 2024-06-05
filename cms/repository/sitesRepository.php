@@ -280,7 +280,8 @@ class sitesRepository extends dbRepository {
           $logoUrl = $logoAddress.$logoUrl;
           $update = true;
         }
-        if($logo_image_delete = filter_var( $post['logo_image_delete'], FILTER_VALIDATE_INT)){
+        if(isset($post['logo_image_delete']) && 
+           $logo_image_delete = filter_var( $post['logo_image_delete'], FILTER_VALIDATE_INT)){
           $update = true;
         }
         if($update){

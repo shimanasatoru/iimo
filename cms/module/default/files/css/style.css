@@ -1,0 +1,288 @@
+/*
+<style> */
+  @charset "utf-8";
+  body{
+    font-family: 'Noto Sans JP', sans-serif;
+  }
+  a {
+    text-decoration:none
+  }
+  .h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    line-height: 1.8;
+  }
+  p, div{
+    line-height: 1.8;
+  }
+  .ls-0 {
+    letter-spacing: normal;
+  }
+  .ls-1 {
+    letter-spacing: 0.1rem;
+  }
+  .ls-2 {
+    letter-spacing: 0.15rem;
+  }
+  .ls-3 {
+    letter-spacing: 0.2rem;
+  }
+  .ls-4 {
+    letter-spacing: 0.25rem;
+  }
+  .ls-5 {
+    letter-spacing: 0.3rem;
+  }
+  .ff-playfair{
+    font-family: 'Playfair Display', serif;
+  }
+  @media (min-width: 1200px)
+    .display-5 {
+      font-size: 2rem;
+  }
+  .display-5 {
+    font-size: calc(1.425rem + 2.1vw);
+    font-weight: 300;
+    line-height: 1.2;
+  }
+  /* font-style */
+  .fst-1{
+    display: block;
+    position: relative;
+    padding: 1.5rem 1rem;
+  }
+  .fst-1:after{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 10px;
+    content: '';
+    background-image: -webkit-repeating-linear-gradient(135deg, #000, #000 1px, transparent 2px, transparent 5px);
+    background-image: repeating-linear-gradient(-45deg, #000, #000 1px, transparent 2px, transparent 5px);
+    background-size: 7px 7px;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+  }
+  .fst-2{
+    display: block;
+    padding: 1rem 2rem;
+    border-left: 5px solid #000;
+    background: #f4f4f4;
+  }
+  .fst-3 {
+    display: block;
+    padding: 1rem 2rem;
+    border-left: 4px dashed #000;
+  }
+  .fst-4 {
+    display: block;
+    position: relative;
+    padding: .5rem 2rem;
+    border: 3px solid #d8d8d8;
+    border-radius: 10px;
+    background: #f9f9f9;
+  }
+  .fst-4:before {
+    position: absolute;
+    bottom: -14px;
+    left: 1em;
+    width: 0;
+    height: 0;
+    content: '';
+    border-width: 14px 12px 0 12px;
+    border-style: solid;
+    border-color: #d8d8d8 transparent transparent transparent;
+  }
+  .fst-4:after {
+    position: absolute;
+    bottom: -10px;
+    left: 1em;
+    width: 0;
+    height: 0;
+    content: '';
+    border-width: 14px 12px 0 12px;
+    border-style: solid;
+    border-color: #f9f9f9 transparent transparent transparent;
+  }
+  .text-green{
+    color:#42a28f;
+  }
+  .text-gold{
+    color:#E4B305;
+  }
+  .text-blue{
+    color:#0B3055;
+  }
+  .bg-green{
+    background-color:#42a28f;
+  }
+  .bg-gold{
+    background-color:#E4B305;
+  }
+  .bg-blue{
+    background-color:#0B3055;
+  }
+  .text-decoration-1{
+    border-bottom: solid 3px #0B3055;
+    position: relative;
+  }
+  .text-decoration-1:after {
+    position: absolute;
+    content: " ";
+    display: block;
+    border-bottom: solid 3px #E4B305;
+    bottom: -3px;
+    width: 30%;
+  }
+  /* border-radius */
+  .bottom-right-radius-lg{
+    border-bottom-right-radius: 16vw;
+  }
+  .bottom-left-radius-lg{
+    border-bottom-left-radius: 16vw;
+  }
+  .rounded-4 {
+    border-radius: 0.5rem!important;
+  }
+  .rounded-5 {
+    border-radius: 0.8rem!important;
+  }
+  /* コンテンツ単位の余白 */
+  .py-xxl{
+    padding-top:160px;
+    padding-bottom:160px;
+  }
+  /*==================================================
+  5-2-6 3本線が回転して×に
+  ===================================*/
+  /*ボタン外側※レイアウトによってpositionや形状は適宜変更してください*/
+  .openbtn{
+    z-index: 99999;
+    position: relative;
+    /*ボタン内側の基点となるためrelativeを指定*/
+    background:#E4B305;
+    cursor: pointer;
+    width: 40px;
+    height:40px;
+    border-radius: 50%;
+  }
+  /*ボタン内側*/
+  .openbtn span{
+    display: inline-block;
+    transition: all .4s;
+    /*アニメーションの設定*/
+    position: absolute;
+    left: 11px;
+    height: 3px;
+    border-radius: 2px;
+    background: #fff;
+  }
+  .openbtn span:nth-of-type(1) {
+    top:10px;
+    width: 45%;
+  }
+  .openbtn span:nth-of-type(2) {
+    top:18px;
+    width: 35%;
+  }
+  .openbtn span:nth-of-type(3) {
+    top:26px;
+    width: 20%;
+  }
+  /*activeクラスが付与されると線が回転して×になる*/
+  .openbtn.active {
+    background: #E4B305;
+  }
+  .openbtn.active span:nth-of-type(1) {
+    top: 12px;
+    left: 14px;
+    transform: translateY(6px) rotate(-135deg);
+    width: 30%;
+  }
+  .openbtn.active span:nth-of-type(2) {
+    opacity: 0;
+  }
+  .openbtn.active span:nth-of-type(3){
+    top: 24px;
+    left: 14px;
+    transform: translateY(-6px) rotate(135deg);
+    width: 30%;
+  }
+  /*==================================================
+  機能編 5-1-16　クリックしたら円形背景が拡大（上から）
+  ===================================*/
+  /*アクティブになったエリア*/
+  #g-nav.panelactive{
+    position:fixed;
+    z-index: 999;
+    top: 0;
+    width:100%;
+    height: 100vh;
+  }
+  /*丸の拡大*/
+  .circle-bg{
+    position: fixed;
+    z-index:3;
+    /*丸の形*/
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: #FBE8CC;
+    /*丸のスタート位置と形状*/
+    transform: scale(0);
+    /*scaleをはじめは0に*/
+    top:-50px;
+    left:calc(50% - 50px);
+    /*50%から円の半径を引いた値*/
+    transition: all .6s;
+    /*0.6秒かけてアニメーション*/
+  }
+  .circle-bg.circleactive{
+    transform: scale(50);
+    /*クラスが付与されたらscaleを拡大*/
+  }
+  /*ナビゲーションの縦スクロール*/
+  #g-nav-container{
+    display: none;
+    /*はじめは表示なし*/
+    /*ナビの数が増えた場合縦スクロール*/
+    position: fixed;
+    z-index: 999;
+    width: 100%;
+    height: 100vh;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  #g-nav.panelactive #g-nav-container{
+    display: block;
+    /*クラスが付与されたら出現*/
+  }
+  /*ナビゲーション*/
+  #g-nav ul {
+    opacity: 0;
+    /*はじめは透過0*/
+  }
+  /* 背景が出現後にナビゲーションを表示※レイアウトによって調整してください。不必要なら削除*/
+  #g-nav.panelactive ul{
+    animation-name:gnaviAnime;
+    animation-duration:1s;
+    animation-delay:.2s;
+    /*0.2 秒遅らせて出現*/
+    animation-fill-mode:forwards;
+    opacity:0;
+  }
+  @keyframes gnaviAnime{
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  /* slick arrow を変更 */
+  .slick-prev:before, .slick-next:before {
+    color: #000;
+    opacity: 1;
+  }

@@ -322,7 +322,7 @@ class indexController{
 
     //現在のディレクトリを取得する
     $au = new \autoload;
-    $thisDirectory = $au->uriExplode($uri, $siteData->top_directory ? true : false);
+    $thisDirectory = $au->uriExplode($uri, isset($siteData->top_directory) && $siteData->top_directory ? true : false);
     $params = filter_input_array(INPUT_GET);
     $preview = false;//プレビュー判定
     if($this->getPreviewFlg() || $this->getPreviewPagePost() || $this->getPreviewStructurePost()){

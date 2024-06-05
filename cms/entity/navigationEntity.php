@@ -216,7 +216,10 @@ trait navigationEntity{
   
   public $release_password_status_id;
   public function getReleasePasswordStatusIds(){
-    return $_SESSION["release_password_status_ids"];
+    $return = null;
+    if(isset($_SESSION["release_password_status_ids"]) && $_SESSION["release_password_status_ids"]){
+      $return = $_SESSION["release_password_status_ids"];
+    }
   }
   public function setReleasePasswordStatusId(int $release_password_status_id, bool $status = false) :void{
     if($status){

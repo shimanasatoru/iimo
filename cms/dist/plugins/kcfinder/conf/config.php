@@ -26,7 +26,7 @@ require_once dirname(__DIR__, 5)."/config/config.php";
 $disabled = true;
 $uploadDir = '';
 $uploadURL = '';
-if($_SESSION['user'] && $_SESSION['site']->directory){
+if(isset($_SESSION['user']) && $_SESSION['user'] && $_SESSION['site']->directory){
   //サイト作成
   $disabled = false;
   $design_theme = 'default';
@@ -36,13 +36,13 @@ if($_SESSION['user'] && $_SESSION['site']->directory){
   $uploadDir = DIR_SITE.$_SESSION['site']->directory.'/design/'.$design_theme;
   $uploadURL = ADDRESS_SITE.$_SESSION['site']->directory.'/design/'.$design_theme;
 }
-if($_SESSION['user'] && $_SESSION['cms']->design_theme){
+if(isset($_SESSION['user']) && $_SESSION['user'] && isset($_SESSION['cms']->design_theme) && $_SESSION['cms']->design_theme){
   //モジュール作成
   $disabled = false;
   $uploadDir = DIR_CMS.'module/'.$_SESSION['cms']->design_theme;
   $uploadURL = ADDRESS_CMS.'module/'.$_SESSION['cms']->design_theme;
 }
-if($_SESSION['user']->permissions == 'administrator' && !$_SESSION['site']->id){
+if(isset($_SESSION['user']) && $_SESSION['user']->permissions == 'administrator' && !$_SESSION['site']->id){
   //管理者の場合、お知らせ投稿
   $disabled = false;
   $uploadDir = DIR_CMS.'templates/finder/';

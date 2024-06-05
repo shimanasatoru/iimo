@@ -71,7 +71,7 @@ class pageModuleCategoryRepository extends dbRepository {
         $array[] = $d;
         $new[$d->parent_id][] = $d;
       }
-      $this->row = $this->tree($new, array($array[0]));
+      $this->row = $this->tree($new, isset($array[0]) ? array($array[0]) : array());
       $this->rowNumber = $stmt->rowCount();
       if($this->rowNumber > 0){
         $this->set_status(true);

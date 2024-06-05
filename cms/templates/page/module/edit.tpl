@@ -75,7 +75,7 @@
           <div class="col-lg-12">
             <div class="explanation form-group">
               <label class="text-xs">モジュールの説明</label>
-              <textarea name="explanation" class="form-control" rows="5">{$data->explanation}</textarea>
+              <textarea name="explanation" class="form-control" rows="5">{$data->explanation|default}</textarea>
               <small class="text-muted">※モジュール選択画面にて使用されます。</small>
             </div>
           </div>

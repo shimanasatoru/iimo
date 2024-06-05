@@ -75,7 +75,6 @@
             <input type="hidden" name="id" value="" readonly>
             <input type="hidden" name="navigation_id" value="" readonly>
             <input type="hidden" name="module_id" value="" readonly>
-            <input type="hidden" name="release_kbn" value="1" readonly>
             <div class="col-lg form-group">
               <label for="moduleName">モジュール名</label>
               <input id="moduleName" type="text" name="name" class="modal-title form-control form-control-border" placeholder="モジュール名を入力" value="">
@@ -147,6 +146,9 @@
     var module_type = $(this).data('moduletype');
     var name = $(this).data('name');
     var o_navigation_id = $(this).data('onavigationid');
+    var release_kbn = $(this).data('releasekbn');
+    var release_start_date = $(this).data('releasestartdate');
+    var release_end_date = $(this).data('releaseenddate');
     var src = $(this).data('src');
     if(!navigation_id || !module_id || !name || !src){
       alert('モジュールがありません');
@@ -158,6 +160,9 @@
     $('#moduleModal form [name="module_id"]').val(module_id);
     $('#moduleModal form [name="name"]').val(name);
     $('body').data('o_navigation_id', o_navigation_id);//bodyで渡す
+    $('body').data('release_kbn', release_kbn);//bodyで渡す
+    $('body').data('release_start_date', release_start_date);//bodyで渡す
+    $('body').data('release_end_date', release_end_date);//bodyで渡す
     selectNavigationData();//セレクトナビゲーションを呼ぶ
     
     var badge = '<span class="badge badge-primary">※この要素は変更可能です。</span>';
@@ -305,10 +310,35 @@
       return false;
     }
     var option = selectNavigationTree(e.row);
+    var release_start_date = $('body').data('release_start_date');
+    var release_end_date = $('body').data('release_end_date');
+    var release_select = '<option value="1"';
+        if(release_kbn == 1){ release_select += ' selected '; }
+        release_select += '>公開する</option>';
+    release_select += '<option value="2"';
+        if(release_kbn == 2){ release_select += ' selected '; }
+        release_select += '>編集者にのみ公開する</option>';
+    release_select += '<option value="0"';
+        if(release_kbn == 0){ release_select += ' selected '; }
+        release_select += '>下書き</option>';
     $('#moduleModal form #append').append(
-      '<div class="col form-group">' +
+      '<div class="col-4 form-group">' +
         '<label for="selectNavigation">使用するナビゲーション</label>' +
         '<select id="selectNavigation" name="o_navigation_id" class="form-control form-control-border">' + option + '</select>' +
+      '</div>' +
+      '<div class="col-2 form-group">' +
+        '<label>公開</label>' +
+        '<select name="release_kbn" class="form-control form-control-border">' +
+          release_select +
+        '</select>' +
+      '</div>' +
+      '<div class="col-3 form-group">' +
+        '<label>公開開始日</label>' +
+        '<input type="date" name="release_start_date" placeholder="公開開始日" class="form-control" value="'+ release_start_date +'" data-inputmask-alias="datetime" data-inputmask-inputformat="yyyy/mm/dd" data-mask>' +
+      '</div>' +
+      '<div class="col-3 form-group">' +
+        '<label>公開終了日</label>' +
+        '<input type="date" name="release_end_date" placeholder="公開終了日" class="form-control" value="'+ release_end_date +'" data-inputmask-alias="datetime" data-inputmask-inputformat="yyyy/mm/dd" data-mask>' +
       '</div>'
     );
     return false;
