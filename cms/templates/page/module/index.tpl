@@ -7,10 +7,10 @@
           <h1 class="mb-2 font-weight-bolder">
             <i class="fas fa-pager fa-fw"></i>
             モジュール
-            {if $smarty.session.site->design_authority == "default"}
+            {if $smarty.session.site->design_authority|default == "default"}
             <span class="badge badge-secondary text-xs">{$smarty.session.site->design_authority}</span>
             {else}
-            <span class="badge badge-primary text-xs">{$smarty.session.site->design_authority}</span>
+            <span class="badge badge-primary text-xs">{$smarty.session.site->design_authority|default}</span>
             {/if}
           </h1>
           <div class="text-muted small">
@@ -44,7 +44,7 @@
                   モジュール
                 </div>
                 <div class="col-auto">
-                  <button type="button" class="modal-url btn btn-sm btn-primary" data-id="modal-1" data-title="モジュールの設定" data-footer_class="mf-edit-pageModule" data-url="{$smarty.const.ADDRESS_CMS}pageModule/edit/?theme={$smarty.get.theme} #content" {if !$smarty.get.theme}disabled{/if}>
+                  <button type="button" class="modal-url btn btn-sm btn-primary" data-id="modal-1" data-title="モジュールの設定" data-footer_class="mf-edit-pageModule" data-url="{$smarty.const.ADDRESS_CMS}pageModule/edit/?theme={$smarty.get.theme|default} #content" {if !$smarty.get.theme|default}disabled{/if}>
                     <i class="fas fa-plus"></i>&nbsp;
                     新規登録
                   </button>
@@ -88,7 +88,7 @@
                   カテゴリ
                 </div>
                 <div class="col-auto">
-                  <button type="button" class="modal-url btn btn-sm btn-primary" data-id="modal-1" data-title="カテゴリの設定" data-footer_class="mf-edit-pageModuleCategory" data-url="{$smarty.const.ADDRESS_CMS}pageModuleCategory/edit/?theme={$smarty.get.theme} #content" {if !$smarty.get.theme}disabled{/if}>
+                  <button type="button" class="modal-url btn btn-sm btn-primary" data-id="modal-1" data-title="カテゴリの設定" data-footer_class="mf-edit-pageModuleCategory" data-url="{$smarty.const.ADDRESS_CMS}pageModuleCategory/edit/?theme={$smarty.get.theme|default} #content" {if !$smarty.get.theme|default}disabled{/if}>
                     <i class="fas fa-plus"></i>&nbsp;
                     新規登録
                   </button>
@@ -103,7 +103,7 @@
             <div class="card-body table-responsive p-0" style="max-height: 70vh">
               <table class="table table-secondary table-head-fixed text-nowrap table-striped">
                 <tbody id="category">
-                {if $category->rowNumber > 0}
+                {if $category->rowNumber|default > 0}
                   {function name=tree level=0}
                   {foreach $data as $parent => $child}
                     {assign var=release_icon value='<span class="badge bg-secondary">非公開</span>'}
@@ -132,7 +132,7 @@
                         <span class="handle btn btn-xs btn-secondary"><i class="fas fa-arrows-alt"></i></span>
                       </td>
                     </tr>
-                    {if is_array($child->children)}
+                    {if is_array($child->children|default)}
                     {call name=tree data=$child->children level=$level+1}
                     {/if}
                   {/foreach}
@@ -148,23 +148,12 @@
             </div>
             <div class="card-footer row justify-content-between">
               <div class="col-auto small">
-                全{$category->rowNumber}件を表示
+                全{$category->rowNumber|default:0}件を表示
               </div>
             </div>
           </div>
         </section>
       </div>
-      
-      {*
-      <div class="row">
-      
-        <div class="col-4 ckeditor_inline" contenteditable="true">a</div>
-        <div class="col-4 ckeditor_inline" contenteditable="true">a</div>
-        <div class="col-4 ckeditor_inline" contenteditable="true">a</div>
-      
-      </div>
-      *}
-
     </div>
   </section>
 </div>

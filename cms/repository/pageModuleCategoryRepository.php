@@ -15,14 +15,8 @@ class pageModuleCategoryRepository extends dbRepository {
   public function tree(&$list, $parent, $level = 0, $dirPath = array()){
     $tree = array();
     foreach ($parent as $key=>$value){
-      if($level > 0){
-        $dirPath[$level] = $value->directory_name;
-      }
       if(isset($list[$value->id])){
         $value->children = $this->tree($list, $list[$value->id], $level + 1, $dirPath);
-      }
-      if($level > 0){
-        $value->url .= implode('/', $dirPath);
       }
       $tree[] = $value;
     }

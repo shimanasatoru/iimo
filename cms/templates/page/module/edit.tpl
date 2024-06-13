@@ -19,8 +19,8 @@
             <div class="module_theme form-group">
               <label class="text-xs">テーマ&nbsp;<span class="badge badge-danger">必須</span></label>
               <select name="module_theme" class="form-control form-control-border">
-                {foreach $theme->row as $row}{if !$smarty.get.theme || $smarty.get.theme == $row->basename}
-                <option value="{$row->basename}" {if $data->module_theme == $row->basename}selected{/if}>{$row->basename}</option>
+                {foreach $theme->row as $row}{if !$smarty.get.theme|default || $smarty.get.theme == $row->basename}
+                <option value="{$row->basename}" {if $data->module_theme|default == $row->basename}selected{/if}>{$row->basename}</option>
                 {/if}{/foreach}
               </select>
             </div>

@@ -39,7 +39,7 @@ class pageModuleController{
       ],
     ]);
     
-    //$result = array('_message' => array("テーマを選択して下さい。"), '_status' => false);
+    $result = array('_status' => false);
     if(@$params['theme']){//テーマは必須
       $pm = new pageModuleRepository;
       $pm->setModuleTheme($params['theme']);
@@ -96,7 +96,7 @@ class pageModuleController{
        */
       $c = new pageModuleCategoryRepository;
       $c->setModuleTheme($params['theme']);
-      if($s->design_authority == "original" && $s->id){
+      if(isset($s->design_authority) && $s->design_authority == "original" && $s->id){
         $c->setSiteId($s->id);
       }
       if($params['id']){
@@ -105,7 +105,7 @@ class pageModuleController{
       $c->setOrder("rank ASC");
       $result = $c->get();
     }
-    if($params['dataType'] == 'json'){
+    if(@$params['dataType'] == 'json'){
       echo json_encode($result, JSON_UNESCAPED_UNICODE);
       return true;
     }
@@ -152,7 +152,8 @@ class pageModuleController{
     
     //システム管理者でサイト選択状態時、デザイン権限「default」ならsite_idをnull判定
     $site_id = $s->id;
-    if(in_array($u->permissions, ["administrator"]) && $s->design_authority == 'default'){
+    if(isset($s->design_authority) && 
+       in_array($u->permissions, ["administrator"]) && $s->design_authority == 'default'){
       $site_id = null;
     }
 
@@ -170,7 +171,7 @@ class pageModuleController{
 
     $tm = new templateModuleRepository;
     $theme = $tm->get();
-    if($s->design_authority == 'original'){
+    if(isset($s->design_authority) && $s->design_authority == 'original'){
       //オリジナル権限
       $t = new templateRepository;
       $t->setDirectory($s->directory);

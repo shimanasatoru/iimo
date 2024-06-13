@@ -22,7 +22,7 @@
     <div class="container-fluid">
       <form id="pageModuleCategoryForm" class="row" method="post" action="?{$smarty.server.QUERY_STRING}" enctype="multipart/form-data" onSubmit="return false;">
         <input type="hidden" name="token" value="{$token}">
-        <input type="hidden" name="id" value="{$data->id}">
+        <input type="hidden" name="id" value="{$data->id|default}">
         <input type="hidden" name="delete_kbn" value="">
         <section class="col-12">
           <div class="alert alert-danger small" style="display: none"></div>
@@ -54,7 +54,7 @@
                   <label>
                     カテゴリ名&nbsp;<span class="badge badge-danger">必須</span>
                   </label>
-                  <input type="text" name="name" class="form-control form-control-border" placeholder="カテゴリ名を入力" value="{$data->name}">
+                  <input type="text" name="name" class="form-control form-control-border" placeholder="カテゴリ名を入力" value="{$data->name|default}">
                 </div>
               </div>
               <div class="col-lg-3">
@@ -62,7 +62,7 @@
                   <label class="text-xs">テーマ&nbsp;<span class="badge badge-danger">必須</span></label>
                   <select name="module_theme" class="form-control form-control-border">
                     {foreach $theme->row as $row}{if !$smarty.get.theme || $smarty.get.theme == $row->basename}
-                    <option value="{$row->basename}" {if $data->module_theme == $row->basename}selected{/if}>{$row->basename}</option>
+                    <option value="{$row->basename}" {if $data->module_theme|default == $row->basename}selected{/if}>{$row->basename}</option>
                     {/if}{/foreach}
                   </select>
                 </div>
@@ -70,9 +70,9 @@
               <div class="col-lg-2 release_kbn form-group">
                 <label>公開</label>
                 <select name="release_kbn" class="form-control form-control-border">
-                  <option value="1" {if $data->release_kbn == 1}selected{/if}>公開する</option>
-                  <option value="2" {if $data->release_kbn == 2}selected{/if}>編集者にのみ公開する</option>
-                  <option value="0" {if $data->release_kbn != null && $data->release_kbn == 0}selected{/if}>下書き</option>
+                  <option value="1" {if $data->release_kbn|default == 1}selected{/if}>公開する</option>
+                  <option value="2" {if $data->release_kbn|default == 2}selected{/if}>編集者にのみ公開する</option>
+                  <option value="0" {if $data->release_kbn|default != null && $data->release_kbn == 0}selected{/if}>下書き</option>
                 </select>
               </div>
             </div>

@@ -39,7 +39,8 @@ class templateController{
       ],
     ]);
     $n = new templateRepository;
-    if($_SESSION['site']->directory && $_SESSION['site']->design_authority == "original"){
+    if(isset($_SESSION['site']->directory) 
+       && $_SESSION['site']->directory && $_SESSION['site']->design_authority == "original"){
       $n->setDirectory($_SESSION['site']->directory);
     }
     if($params['theme']){
