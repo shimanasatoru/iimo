@@ -95,6 +95,12 @@
           <div id="error" class="w-100">
             <div class="alert alert-danger text-xs" style="display: none"></div>
           </div>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="layout_preview">
+            <label class="form-check-label" for="layout_preview">
+              レイアウトプレビュー
+            </label>
+          </div>
           <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">閉じる</button>
           <button type="button" class="module-delete btn btn-sm btn-danger">削除する</button>
           <button type="button" class="module-entry btn btn-sm btn-primary">登録する</button>
@@ -186,97 +192,11 @@
           "const styleset_add = [{/literal}{$smarty.session.page_setting->editor_style|unescape|replace:'&#13;':''|replace:'&#10;':''}{literal}];" +
           'const colorButton_colors = "{/literal}{$smarty.session.page_setting->editor_color_palette}{literal}";' +
         '<\/script>'+
-        '<script src="https://iimo2.sakura.ne.jp/cms/dist/plugins/ckeditor_4_22_1/ckeditor.js?20240209"><\/script>'+
-        '<script src="https://iimo2.sakura.ne.jp/cms/dist/js/rgbcolor.js"><\/script>'+
-        '<script src="https://iimo2.sakura.ne.jp/cms/dist/js/iframe_ckeditor.js?41"><\/script>'+
-        '<style>'+
-          '.ckeditor-border{ border: 1px dashed #333; padding:4px; }'+
-          '.modal-editable-body > div{ padding-bottom: 1rem; }'+
-          '.modal-editable-body > table{ border:5px solid #ccc }'+
-          '.modal-editable-body input{ padding: 0.1rem 0.2rem; }'+
-          '.modal-editable-body select{ padding: 0.4rem 0.2rem 0.4rem 0.2rem; }'+
-        '<\/style>'
+        '<script src="{/literal}{$smarty.const.ADDRESS_CMS}{literal}dist/plugins/ckeditor_4_22_1/ckeditor.js?20240209"><\/script>'+
+        '<script src="{/literal}{$smarty.const.ADDRESS_CMS}{literal}dist/js/rgbcolor.js"><\/script>'+
+        '<script src="https://localhost/iimo/web/editor/iframe_ckeditor.js?51"><\/script>' +
+        '<link href="https://localhost/iimo/web/editor/iframe_ckeditor.css?47" rel="stylesheet" crossorigin="anonymous">'
       );
-
-      //初期化
-      contents.find('#editable input').remove();
-      contents.find('[data-editabletype]').each(function(i, e){
-        var editabletype = $(e).data('editabletype');
-        var placeholder = $(e).data('placeholder');
-        var href = $(e).data('href');
-        var src = $(e).data('src');
-        var alt = $(e).data('alt');
-        
-        if(editabletype == "text"){
-          //iframe_ckeditor.js
-        }
-        if(editabletype == "link"){
-          if(!$.trim($(e).html()).length){
-            $(e).html(placeholder);
-          }
-          //$(e).attr("contenteditable", true);
-          //$(e).append('<span data-editabletype="area" style="display:none;position:relative"><input type="url" data-editabletype="href" placeholder="'+href+'" style="position:absolute;top:0;left:0;width:200px"></span>');
-        }
-        if(editabletype == "image"){
-          $(e).css("pointer-events", "").css("user-select", "");
-          if(!$(e).attr("src").length){
-            $(e).attr("src", src);
-          }
-          if(!$(e).attr("alt").length){
-            $(e).attr("alt", alt);
-          }
-          $(e).after('<div data-editabletype="area" style="position:relative"><input type="text" data-editabletype="alt" placeholder="'+alt+'" style="position:absolute;top:0;left:0;width:200px"></div>');
-        }
-        if(editabletype == "background"){
-          var color = $(e).css('background-color').replace("rgba(","").replace("rgb(","").replace(")","").split(",");
-          color = "#"+parseInt(color[0]).toString(16)+parseInt(color[1]).toString(16)+parseInt(color[2]).toString(16);
-          $(e).after('<div data-editabletype="area" style="position:relative;font: normal normal normal 12px Arial,Helvetica,Tahoma,Verdana,Sans-Serif;"><div style="display:flex;justify-content: center;position:absolute;top:0;right:0;"><div><button type="button" data-editabletype="setting-background">背景設定</button></div></div></div>');
-        }
-      });
-      //変更
-      contents.on("change", '[data-editabletype]', function(){
-        var target = $(this);
-        var editabletype = target.data('editabletype');
-        var val = target.val();
-        if(editabletype == "alt"){
-          target.prev('img').attr("alt", val);
-        }
-        if(editabletype == "href"){
-          target.prev('a').attr("href", val);
-        }
-      });
-
-      //ペースト監視
-      /*
-      contents.on("paste", function(e){
-        var pasted = undefined;
-        if (window.clipboardData && window.clipboardData.getData) {
-          pasted = window.clipboardData.getData('Text');
-        } else if (e.originalEvent.clipboardData && e.originalEvent.clipboardData.getData) {
-          pasted = e.originalEvent.clipboardData.getData('text/plain');
-        }
-        setTimeout(function(i){
-          pasted.replace(/(<([^>]+)>)/gi, '');
-          $(e.target).text(pasted);
-        });
-        console.log(e, e.target.textContent, pasted);
-      });
-      */
-
-      //画像ファイルブラウザ
-      contents.on('click', '[data-editabletype="image"]', function(){
-        window.KCFinder = {
-          callBack: function(src) {
-            target.attr('src', src);
-            //url = url.match(/upload\/images\/.*/);
-            window.KCFinder = null;
-          }
-        };
-        var url = ADDRESS_CMS + 'dist/plugins/kcfinder/browse.php?langCode=ja';
-        var target = $(this);
-        window.open(url, '_blank', 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=800, height=500');
-      });
-
       $('#moduleModal').modal('show');
       $('#modal-1').modal('hide');
     });
@@ -285,7 +205,7 @@
     var frame = $('#moduleModal iframe').get(0).contentWindow.document;
     var innerHeight = Math.max(
       frame.body.scrollHeight, frame.body.offsetHeight, frame.body.clientHeight
-      );
+    );
     //$('#moduleModal iframe').removeAttr("height").css('height', innerHeight + 'px');
   });
   $('#moduleModal').on('hidden.bs.modal', function () {
@@ -312,6 +232,7 @@
     var option = selectNavigationTree(e.row);
     var release_start_date = $('body').data('release_start_date');
     var release_end_date = $('body').data('release_end_date');
+    var release_kbn = $('body').data('release_kbn');
     var release_select = '<option value="1"';
         if(release_kbn == 1){ release_select += ' selected '; }
         release_select += '>公開する</option>';
@@ -321,6 +242,7 @@
     release_select += '<option value="0"';
         if(release_kbn == 0){ release_select += ' selected '; }
         release_select += '>下書き</option>';
+    
     $('#moduleModal form #append').append(
       '<div class="col-4 form-group">' +
         '<label for="selectNavigation">使用するナビゲーション</label>' +
@@ -366,6 +288,18 @@
     return html;
   }
   
+  //レイアウトプレビュー
+  $(document).on('change','#layout_preview', function() {
+    let value = $(this).prop('checked');
+    if(value){
+      var contents = $("#moduleModal iframe").contents();
+          contents.find('#editable-end').trigger('click');
+    }else{
+      var contents = $("#moduleModal iframe").contents();
+          contents.find('#editable-start').trigger('click');
+    }
+  });
+  
   /*
    * 保存・削除ボタン
    */
@@ -380,13 +314,10 @@
       return false;
     }
     
-    /*
-     * 
-     */
+    //エディタモード終了
     var contents = $("#moduleModal iframe").contents();
-        contents.find('#ckoff').trigger('click');
-
-    var field_form = $("#moduleModal form").get()[0];    
+        contents.find('#editable-end').trigger('click');
+    var field_form = $("#moduleModal form").get()[0];
     var field = $("#moduleModal iframe").contents().find('[data-editable]').clone();
         contents.find('#ckon').trigger('click');
         field.find('input, [data-editabletype="area"]').remove();//除去
