@@ -491,7 +491,7 @@ class pageRepository extends dbRepository {
     }
     $pageAddress = ADDRESS_SITE.($_SESSION['site']->directory ? $_SESSION['site']->directory.'/' : null).'datas/page/';
     $pageDir = DIR_SITE.($_SESSION['site']->directory ? $_SESSION['site']->directory.'/' : null).'datas/page/';
-    if(!$_SESSION['site']->top_directory && !$_SESSION['site']->directory){
+    if((!isset($_SESSION['site']->top_directory) || !$_SESSION['site']->top_directory) && !$_SESSION['site']->directory){
       $this->set_message('サイトディレクトリを選択してください。');
     }
     if(!$push['navigation_id']){
@@ -523,8 +523,8 @@ class pageRepository extends dbRepository {
     if($this->_message || $this->_invalid){
       return $this;
     }
-    $content = $push['content'];
-    $delete_images = $push['delete_images'];
+    $content = @$push['content'];
+    $delete_images = @$push['delete_images'];
     unset($push['content'], $push['delete_images'], $push['token']);
     
     $this->connect();

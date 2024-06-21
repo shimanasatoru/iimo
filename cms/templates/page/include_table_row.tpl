@@ -5,37 +5,37 @@
   {foreach $field->detail as $col}
   <td>
     {if $col->column_type == 'input_text'}
-    <input type="text" name="content[{$f->id}][{$col->column_id}][]" class="form-control form-control-sm" value="{$value[$col->column_id]}" placeholder="{$col->column_detail}">
+    <input type="text" name="content[{$f->id}][{$col->column_id}][]" class="form-control form-control-sm" value="{$value[$col->column_id]|default}" placeholder="{$col->column_detail|default}">
     {/if}
     {if $col->column_type == 'input_number'}
-    <input type="number" name="content[{$f->id}][{$col->column_id}][]" class="form-control form-control-sm" value="{$value[$col->column_id]}" placeholder="{$col->column_detail}">
+    <input type="number" name="content[{$f->id}][{$col->column_id}][]" class="form-control form-control-sm" value="{$value[$col->column_id]|default}" placeholder="{$col->column_detail|default}">
     {/if}
     {if $col->column_type == 'input_tel'}
-    <input type="tel" name="content[{$f->id}][{$col->column_id}][]" class="form-control form-control-sm" value="{$value[$col->column_id]}" placeholder="{$col->column_detail}">
+    <input type="tel" name="content[{$f->id}][{$col->column_id}][]" class="form-control form-control-sm" value="{$value[$col->column_id]|default}" placeholder="{$col->column_detail|default}">
     {/if}
     {if $col->column_type == 'input_email'}
-    <input type="email" name="content[{$f->id}][{$col->column_id}][]" class="form-control form-control-sm" value="{$value[$col->column_id]}" placeholder="{$col->column_detail}">
+    <input type="email" name="content[{$f->id}][{$col->column_id}][]" class="form-control form-control-sm" value="{$value[$col->column_id]|default}" placeholder="{$col->column_detail|default}">
     {/if}
     {if $col->column_type == 'input_date'}
-    <input type="date" name="content[{$f->id}][{$col->column_id}][]" class="form-control form-control-sm" value="{$value[$col->column_id]}" placeholder="{$col->column_detail}">
+    <input type="date" name="content[{$f->id}][{$col->column_id}][]" class="form-control form-control-sm" value="{$value[$col->column_id]|default}" placeholder="{$col->column_detail|default}">
     {/if}
     {if $col->column_type == 'input_time'}
-    <input type="time" name="content[{$f->id}][{$col->column_id}][]" class="form-control form-control-sm" value="{$value[$col->column_id]}" placeholder="{$col->column_detail}">
+    <input type="time" name="content[{$f->id}][{$col->column_id}][]" class="form-control form-control-sm" value="{$value[$col->column_id]|default}" placeholder="{$col->column_detail|default}">
     {/if}
     {if $col->column_type == 'input_datetime'}
-    <input type="datetime-local" name="content[{$f->id}][{$col->column_id}][]" class="form-control form-control-sm" value="{$value[$col->column_id]}" placeholder="{$col->column_detail}">
+    <input type="datetime-local" name="content[{$f->id}][{$col->column_id}][]" class="form-control form-control-sm" value="{$value[$col->column_id]|default}" placeholder="{$col->column_detail|default}">
     {/if}
     {if $col->column_type == 'input_url'}
-    <input type="url" name="content[{$f->id}][{$col->column_id}][]" class="form-control form-control-sm" value="{$value[$col->column_id]}" placeholder="{$col->column_detail}">
+    <input type="url" name="content[{$f->id}][{$col->column_id}][]" class="form-control form-control-sm" value="{$value[$col->column_id]|default}" placeholder="{$col->column_detail|default}">
     {/if}
     {if $col->column_type == 'textarea'}
-    <textarea name="content[{$f->id}][{$col->column_id}][]" class="form-control form-control-sm" rows="2" style="min-width:240px" placeholder="{$col->column_detail}">{$value[$col->column_id]}</textarea>
+    <textarea name="content[{$f->id}][{$col->column_id}][]" class="form-control form-control-sm" rows="2" style="min-width:240px" placeholder="{$col->column_detail|default}">{$value[$col->column_id]|default}</textarea>
     {/if}
     
     {if $col->column_type == 'select'}{* select *}
     <select name="content[{$f->id}][{$col->column_id}][]" class="custom-select custom-select-sm">
       {foreach $col->column_detail as $n => $v}
-      <option {if $value[$col->column_id] == $v}selected{/if}>{$v}</option>
+      <option {if $value[$col->column_id]|default == $v}selected{/if}>{$v}</option>
       {/foreach}
     </select>
     {/if}
@@ -57,7 +57,7 @@
       {* id,name,forは、jsにて管理 *}
       {foreach $col->column_detail as $n => $v}
       <div data-column_key="{$col->column_id}" class="custom-control custom-radio mr-3">
-        <input type="radio" value="{$v}" class="custom-control-input" {if $value[$col->column_id] == $v}checked{/if}>
+        <input type="radio" value="{$v}" class="custom-control-input" {if $value[$col->column_id]|default == $v}checked{/if}>
         <label class="custom-control-label">{$v}</label>
       </div>
       {/foreach}
@@ -74,7 +74,7 @@
       </div>
       <div class="col">
         <div class="mb-1">
-          <input type="url" name="content[{$f->id}][{$col->column_id}][]" class="form-control form-control-sm" value="{$value[$col->column_id]}" placeholder="URL" readonly>
+          <input type="url" name="content[{$f->id}][{$col->column_id}][]" class="form-control form-control-sm" value="{$value[$col->column_id]|default}" placeholder="URL" readonly>
         </div>
         <div>
           <input type="file" name="content[{$f->id}][{$col->column_id}][]" accept="image/*" data-name="content[{$f->id}][{$col->column_id}][]" class="btn-camera-add btn btn-xs btn-info p-0">

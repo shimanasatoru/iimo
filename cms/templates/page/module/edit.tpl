@@ -37,12 +37,12 @@
                       {section name=cnt loop=$level}&nbsp;{/section}
                       -{$child->name}（{if $child->release_kbn == 1}公開中{elseif $child->release_kbn == 2}限定{else}非公開{/if}）
                     </option>
-                    {if is_array($child->children)}
+                    {if is_array($child->children|default)}
                     {call name=tree d=$child->children level=$level+1}
                     {/if}
                   {/foreach}
                   {/function}
-                  {call name=tree d=$category->row selector=$data->module_category_id}
+                  {call name=tree d=$category->row selector=$data->module_category_id|default}
                 {/if}
               </select>
             </div>
@@ -62,7 +62,7 @@
             <div class="tab-pane fade {if $data->module_type|default == "html"}show active{/if}" id="content_html">
               <div class="html form-group">
                 <label class="text-xs">HTMLコード&nbsp;<span class="badge badge-danger">必須</span></label>
-                <textarea id="html" name="html" class="form-control">{$data->html}</textarea>
+                <textarea id="html" name="html" class="form-control">{$data->html|default}</textarea>
               </div>
             </div>
             <div class="tab-pane fade {if $data->module_type|default == "template"}show active{/if}" id="content_template">

@@ -236,7 +236,7 @@
                       </tr>
                     </thead>
                     <tbody id="table-{$f->id}">
-                      {foreach $data->fields[$field]->value as $i => $array}
+                      {foreach $data->fields[$field]->value|default as $i => $array}
                       {include file='./include_table_row.tpl' field=$f i=$i value=$array}
                       {foreachelse}
                       {include file='./include_table_row.tpl' field=$f i=$i value=[]}
@@ -336,7 +336,8 @@
           $(e).find('[type="checkbox"]').attr('name', name + '[]');
 
           //サムネイル
-          var url = $(e).find('[name="content['+field_id+']['+column_key+'][]"]').val();
+          var url = $(e).find('[name="content['+field_id+']['+column_key+'][]"][type="url"]').val();
+          var file = $(e).find('[name="content['+field_id+']['+column_key+'][]"][type="file"]').val();
           if(url){
             $(e).find('.thumbnail .default').addClass('d-none');
             //パラメータ除去、小文字へ変換して拡張子判定
@@ -347,7 +348,7 @@
               $(e).find('.thumbnail .file').addClass('d-none');
               $(e).find('.thumbnail img').attr('src', url).removeClass('d-none');
             }
-          }else{
+          }else if(!file){
             $(e).find('.thumbnail .default').removeClass('d-none');
             $(e).find('.thumbnail .file').addClass('d-none');
             $(e).find('.thumbnail img').addClass('d-none');
@@ -467,7 +468,10 @@
       alert('data属性がありません。');
       return false;
     }
+    $('[data-name="'+ name +'"] .default').eq(i).removeClass("d-none");
+    $('[data-name="'+ name +'"] img').eq(i).addClass("d-none").attr("src", "");
     $('[name="'+ name +'"][type="url"]').eq(i).val("");
+    $('[name="'+ name +'"][type="file"]').eq(i).val("");
     resetTableId();
   });
   /*
