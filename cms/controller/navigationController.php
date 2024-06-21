@@ -72,7 +72,10 @@ class navigationController{
     $n->setSiteId($_SESSION['site']->id);
     $n->setReleaseKbn(1);
     $n->setOrder("rank ASC");
-    $n->sitemapCreate();
+    if($n->sitemapCreate()){
+      $address = ADDRESS_CMS.'?reload';
+      header("Location: {$address}", true , 301);
+    }
   }
   
   public function editAction(){

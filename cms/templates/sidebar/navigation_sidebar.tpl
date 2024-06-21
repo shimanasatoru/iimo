@@ -24,6 +24,14 @@
     </p>
   </a>
 </li>
+<li class="nav-item">
+  <a href="{$smarty.const.ADDRESS_CMS}navigation/sitemapCreate" class="nav-link">
+    <i class="nav-icon fas fa-redo-alt fa-fw"></i>
+    <p>
+      サイトマップ更新
+    </p>
+  </a>
+</li>
 <li class="nav-header"><small>サイト設定</small></li>
 <li class="nav-item">
   <a href="{$smarty.const.ADDRESS_CMS}navigation/" class="nav-link">
