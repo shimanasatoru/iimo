@@ -442,6 +442,9 @@
             'data-moduletype="'+ row[i].module_type +'" '+
             'data-name="'+ row[i].name +'" '+
             'data-onavigationid="'+ row[i].o_navigation_id +'" '+
+            'data-releasekbn="'+ row[i].release_kbn +'" '+
+            'data-releasestartdate="'+ row[i].release_start_date +'" '+
+            'data-releaseenddate="'+ row[i].release_end_date +'" '+
             'data-src="'+ ADDRESS_CMS +'pageStructure/edit/'+row[i].navigation_id+'/'+row[i].id+'/" '+
           '>'+
             '<i class="fas fa-pen"></i>&nbsp;変更'+
