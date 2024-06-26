@@ -63,7 +63,7 @@ class navigationController{
     $n->directoryPathCreate();
   }
   
-  public function sitemapCreateAction(){
+  public function sitemapCreateAction($reload = true){
     if(!$_SESSION['site']->id){
       return print "サイトを選択して下さい";
     }
@@ -72,7 +72,7 @@ class navigationController{
     $n->setSiteId($_SESSION['site']->id);
     $n->setReleaseKbn(1);
     $n->setOrder("rank ASC");
-    if($n->sitemapCreate()){
+    if($reload && $n->sitemapCreate()){
       $address = ADDRESS_CMS.'?reload';
       header("Location: {$address}", true , 301);
     }
@@ -201,7 +201,7 @@ class navigationController{
     }
     
     if($result->_status == true){
-      $this->sitemapCreateAction(); //サイトマップ生成
+      $this->sitemapCreateAction(false); //サイトマップ生成
     }    
     
     $dataType = filter_input( INPUT_GET, 'dataType', FILTER_SANITIZE_SPECIAL_CHARS);
