@@ -20,7 +20,7 @@ class navigationRepository extends dbRepository {
       if($level > 0){
         $dirPath[$level] = $value->directory_name;
       }
-      if(isset($list[$value->id])){
+      if(isset($list[@$value->id])){
         $value->children = $this->tree($list, $list[$value->id], $level + 1, $dirPath);
       }
       if($level > 0 && $value->format_type != 'link'){
@@ -92,7 +92,7 @@ class navigationRepository extends dbRepository {
         $new[$d->parent_id][] = $d;
       }
       $ut = new utilityRepository;
-      $this->row = $this->tree($new, array($array[0]));
+      $this->row = $this->tree($new, array(@$array[0]));
       if($id = self::getId()){
         //ID指定の場合、URL成型が必要なため全件取得後、抜き出す
         $this->row[0] = $this->target_row;
