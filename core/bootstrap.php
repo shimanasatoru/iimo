@@ -17,12 +17,6 @@ if(!empty($_SERVER['HTTPS'])){
   }
 }
 
-ini_set('session.gc_maxlifetime', 216000);
-ini_set('session.cookie_lifetime', 216000);
-ini_set('session.gc_probability', 1);
-ini_set('session.gc_divisor', 1);
-@session_start();
-
 // php version check
 if (!preg_match('/^(\d+\.\d+)/', PHP_VERSION, $ver) || ($ver[1] < 5.3))
   die("あなたのPHP " . PHP_VERSION . " 、当サービスに必要なバージョンは5.3以上となります。");
