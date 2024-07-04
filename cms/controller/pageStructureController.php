@@ -88,7 +88,7 @@ class pageStructureController{
         'options'=> array('default'=>null)
       ]
     ]);
-    if(!$site || !$navigation_id){
+    if(!$site || !isset($site->id) || !$navigation_id){
       return false;
     }
 
@@ -134,6 +134,9 @@ class pageStructureController{
       $p->setModuleId($module_id);
     }
     $p->preview();
+    
+    print_r($p);
+    
     return false;
   }
   

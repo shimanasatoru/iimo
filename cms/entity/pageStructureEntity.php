@@ -66,6 +66,11 @@ trait pageStructureEntity{
         'filter' => FILTER_SANITIZE_SPECIAL_CHARS,
         'options'=> array('default'=>null)
       ],
+      'htmlparts' => [
+        'filter' => FILTER_SANITIZE_SPECIAL_CHARS,
+        'flags'  => FILTER_FORCE_ARRAY,
+        'options'=> array('default'=>null)
+      ],
       'o_navigation_id' => [
         'filter' => FILTER_VALIDATE_INT,
         'options'=> array('default'=>null)

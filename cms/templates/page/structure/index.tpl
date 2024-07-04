@@ -304,8 +304,8 @@
    * 保存・削除ボタン
    */
   $(document).on('click','.module-entry, .module-delete', function() {
-    var fn_name = '保存';
-    var fn_delete = false;
+    let fn_name = '保存';
+    let fn_delete = false;
     if($(this).hasClass('module-delete')){
       fn_name = '削除';
       fn_delete = true;
@@ -315,24 +315,34 @@
     }
     
     //エディタモード終了
-    var contents = $("#moduleModal iframe").contents();
+    let contents = $("#moduleModal iframe").contents();
         contents.find('#editable-end').trigger('click');
-    var field_form = $("#moduleModal form").get()[0];
-    var field = $("#moduleModal iframe").contents().find('[data-editable]').clone();
+    let field_form = $("#moduleModal form").get()[0];
+    let field = $("#moduleModal iframe").contents().find('[data-editable]').clone();
         contents.find('#ckon').trigger('click');
         field.find('input, [data-editabletype="area"]').remove();//除去
 
-    var html = field.html();
-    if(html !== undefined){
-      html = html.replace(/contenteditable="true"/g, "");//除去
-    }
-
-    var form = new FormData(field_form);
-    form.append('html', html);
+    //フォーム作成
+    let form = new FormData(field_form);
     if(fn_delete){
       form.append('delete_kbn', 1);
     }
-    var e = {
+
+    //HTML 取得
+    let html = field.html();
+    if(html !== undefined){
+      html = html.replace(/contenteditable="true"/g, "");//除去
+    }
+    form.append('html', html);
+    
+    //HTML パーツ取得
+    let htmlparts = $("#moduleModal iframe").contents().find('[data-htmlparts]');
+    $.each( htmlparts, function(i, e) {
+      let parts_name = $(e).data('htmlparts');
+      let parts_html = $(e).html();
+      form.append('htmlparts['+ parts_name +']', parts_html);
+    });
+    let e = {
       params: {
         type: 'POST',
         url: ADDRESS_CMS +'pageStructure/push/?dataType=json',

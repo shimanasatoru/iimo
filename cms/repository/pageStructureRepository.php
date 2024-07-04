@@ -61,6 +61,7 @@ class pageStructureRepository extends dbRepository {
       $stmt->execute(self::getValue());
       $fieldColumns = self::getExplodeColumns();//fieldカラムを取得
       while($d = $stmt->fetch(\PDO::FETCH_OBJ)){
+        $d->htmlparts = json_decode($d->htmlparts, true);//array
         $d->data = new \StdClass();
         if($d->o_navigation_id){
           $page = new pageRepository;
@@ -135,6 +136,10 @@ class pageStructureRepository extends dbRepository {
     }
     unset($push['token']);
     
+    if(isset($push['htmlparts'])){
+      $push['htmlparts'] = json_encode( $push['htmlparts'], JSON_UNESCAPED_UNICODE);
+    }
+
     $this->connect();
     $this->beginTransaction();
     try {
@@ -157,7 +162,7 @@ class pageStructureRepository extends dbRepository {
       }
       
       //複製
-      $stmt = $this->prepare("INSERT INTO page_structure_bk ( id, site_id, navigation_id, module_id, account_id, rank, release_kbn, release_start_date, release_end_date, name, html, o_navigation_id, meta_description, meta_keywords, delete_kbn, update_date, created_date ) ( SELECT * FROM page_structure_tbl WHERE id = :id )");
+      $stmt = $this->prepare("INSERT INTO page_structure_bk ( id, site_id, navigation_id, module_id, account_id, rank, release_kbn, release_start_date, release_end_date, name, html, htmlparts, o_navigation_id, meta_description, meta_keywords, delete_kbn, update_date, created_date ) ( SELECT * FROM page_structure_tbl WHERE id = :id )");
       if(!$stmt->execute([
         ':id'=> $this->_lastId
       ])){
