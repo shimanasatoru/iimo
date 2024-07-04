@@ -107,23 +107,28 @@ trait navigationEntity{
         'options'=> array('default'=>null)
       ]
     ]);
-    $accounts = @filter_var_array($post['accounts'], [
-      'navigation_id' => [
-        'filter' => FILTER_VALIDATE_INT,
-        'flags'=> FILTER_REQUIRE_ARRAY,
-        'options'=> array('default'=>null)
-      ],
-      'account_id' => [
-        'filter' => FILTER_VALIDATE_INT,
-        'flags'=> FILTER_REQUIRE_ARRAY,
-        'options'=> array('default'=>null)
-      ],
-      'delete_kbn' => [
-        'filter' => FILTER_VALIDATE_INT,
-        'flags'=> FILTER_REQUIRE_ARRAY,
-        'options'=> array('default'=>null)
-      ]
-    ]);
+    
+    $accounts = array();
+    if(isset($post['accounts']) && is_array($post['accounts'])){
+      $accounts = filter_var_array($post['accounts'], [
+        'navigation_id' => [
+          'filter' => FILTER_VALIDATE_INT,
+          'flags'=> FILTER_REQUIRE_ARRAY,
+          'options'=> array('default'=>null)
+        ],
+        'account_id' => [
+          'filter' => FILTER_VALIDATE_INT,
+          'flags'=> FILTER_REQUIRE_ARRAY,
+          'options'=> array('default'=>null)
+        ],
+        'delete_kbn' => [
+          'filter' => FILTER_VALIDATE_INT,
+          'flags'=> FILTER_REQUIRE_ARRAY,
+          'options'=> array('default'=>null)
+        ]
+      ]);
+    }
+
     switch($type){
       case 'diff'://引数があるものだけとする
         $diff_data = array();

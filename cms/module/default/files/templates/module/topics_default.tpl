@@ -1,5 +1,5 @@
 {* 一覧表示のデータを取得 o_navigation_id 指定がある場合は、$d 取得、以外は$pageData 取得 *}
-{if $d->o_navigation_id}{assign var=elements value=$d->data}
+{if $d->o_navigation_id|default}{assign var=elements value=$d->data}
 {else}{assign var=elements value=$pageData->elements}
 {/if}
 <div id="ID{$d->id}">

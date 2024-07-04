@@ -16,8 +16,8 @@
         <div class="row align-items-center p-2">
           <div class="col form-inline">
             <span class="badge badge-danger">ファイル名(必須)</span>&nbsp;
-            <span>module/{$smarty.request.theme}/files/{$smarty.request.directory}/</span>
-            <input type="text" name="name" class="modal-title form-control" placeholder="ファイル名を入力" value="{$data->fileName}">
+            <span>module/{$smarty.request.theme|default}/files/{$smarty.request.directory|default}/</span>
+            <input type="text" name="name" class="modal-title form-control" placeholder="ファイル名を入力" value="{$data->fileName|default}">
           </div>
           <div class="col-auto">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -26,7 +26,7 @@
           </div>
         </div>
       </div>
-      <textarea id="contents" name="contents" class="form-control">{$data->contents}</textarea>
+      <textarea id="contents" name="contents" class="form-control">{$data->contents|default}</textarea>
     </form>
   </section>
 </div>

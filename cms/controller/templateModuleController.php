@@ -148,8 +148,8 @@ class templateModuleController{
   }
 
   public function pushAction(){
-    $_POST['site_id'] = $_SESSION['site']->id;
-    $_POST['site_directory'] = $_SESSION['site']->directory;
+    $_POST['site_id'] = @$_SESSION['site']->id;
+    $_POST['site_directory'] = @$_SESSION['site']->directory;
     $params = filter_input_array(INPUT_GET, [
       'type' => [
         'filter' => FILTER_SANITIZE_SPECIAL_CHARS,

@@ -39,12 +39,13 @@ class pageModuleController{
       ],
     ]);
     
+    $site = @$_SESSION['site'];
     $result = array('_status' => false);
     if(@$params['theme']){//テーマは必須
       $pm = new pageModuleRepository;
       $pm->setModuleTheme($params['theme']);
-      if($_SESSION['site']->id && $_SESSION['site']->design_authority != 'default'){
-        $pm->setSiteId($_SESSION['site']->id);
+      if(isset($site->id) && $site->id && $site->design_authority != 'default'){
+        $pm->setSiteId($site->id);
       }
       if(@$params['id']){
         $pm->setId($params['id']);

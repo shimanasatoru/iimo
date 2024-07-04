@@ -62,7 +62,7 @@ class accountRepository extends dbRepository {
       );
       $result = file_get_contents($url, false, stream_context_create($context));
       $chk = json_decode($result);
-      if ($chk->success != true){
+      if ($chk->success != true || $chk->score <= 0.5){//スコア0.5以下は終了
         $this->set_message('トークンB(recaptcha)が発行されないため、送信出来ません。');
         return $this;
       }

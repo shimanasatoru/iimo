@@ -221,7 +221,7 @@
               <select id="siteChange" class="form-control form-control-sidebar">
                 <option value="">サイトを選択</option>
                 {foreach from=$smarty.session.user->site_id key=k item=site_id}
-                <option value="{$site_id}" {if $site_id == $smarty.session.site->id}selected{/if}>
+                <option value="{$site_id}" {if $site_id == $smarty.session.site->id|default}selected{/if}>
                   {$smarty.session.user->site_name[$k]}
                 </option>
                 {/foreach}

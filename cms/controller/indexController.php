@@ -59,7 +59,7 @@ class indexController{
   public function indexAction(){
     $user = $_SESSION['user'];
     $site = $_SESSION['site'];
-    
+
     $tpl = new Smarty;
     $au = new \autoload;
     $ut = new utilityRepository;
@@ -102,7 +102,7 @@ class indexController{
 
       $l = new logRepository;
       $l->setLimit(5);
-      if($site->id){
+      if(isset($site->id) && $site->id){
         $l->setSiteId($site->id);
       }else{
         $l->setSiteIds($user->site_id);
@@ -110,7 +110,7 @@ class indexController{
       $active = $l->getPageActiveBk();
 
       $l = new logRepository;
-      if($site->id){
+      if(isset($site->id) && $site->id){
         $l->setSiteId($site->id);
       }else{
         $l->setSiteIds($user->site_id);
@@ -121,7 +121,7 @@ class indexController{
       
       $l = new logRepository;
       $l->setLimit(10);
-      if($site->id){
+      if(isset($site->id) && $site->id){
         $l->setSiteId($site->id);
       }else{
         $l->setSiteIds($user->site_id);
@@ -130,7 +130,7 @@ class indexController{
       
       $mr = new mailReceiveRepository;
       $mr->setLimit(5);
-      if($site->id){
+      if(isset($site->id) && $site->id){
         $mr->setSiteId($site->id);
       }else{
         $mr->setSiteIds($user->site_id);

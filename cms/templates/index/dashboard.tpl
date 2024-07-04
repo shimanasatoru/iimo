@@ -125,7 +125,7 @@
                   <tr>
                     <td width="1">{$a->update_date|date_format:'%y/%m/%d %H:%M'}</td>
                     <td>
-                      {if !$smarty.session.site->id}
+                      {if !$smarty.session.site->id|default}
                       {$a->site_name|default:'___'}&nbsp;
                       <i class="fas fa-chevron-right"></i>
                       {/if}
@@ -204,7 +204,7 @@
                       {if $a->update_date|date_format:"%y%m%d" >= ($smarty.now-24*60*60*3)|date_format:"%y%m%d"}<span class="badge badge-danger">NEW</span>{/if}
                       {$a->name}
                     </td>
-                    {if !$smarty.session.site->id}
+                    {if !$smarty.session.site->id|default}
                     <td>
                       {$a->subject}
                     </td>
@@ -274,20 +274,19 @@
               <h3 class="card-title">サイト情報</h3>
             </div>
             <div class="card-body table-responsive p-0" style="height: 30vh;">
-              <div class="d-none">{$smarty.session.site|@print_r}</div>
               <table class="table table-head-fixed table-striped text-xs text-nowrap">
                 <tbody>
                   <tr width="1">
                     <th>ID</th>
-                    <td>{$smarty.session.site->id}</td>
+                    <td>{$smarty.session.site->id|default}</td>
                   </tr>              
                   <tr>
                     <th>サイトタイトル</th>
-                    <td>{$smarty.session.site->name}</td>
+                    <td>{$smarty.session.site->name|default}</td>
                   </tr>
                   <tr>
                     <th>ドメイン</th>
-                    <td>{$smarty.session.site->domain}</td>
+                    <td>{$smarty.session.site->domain|default}</td>
                   </tr>
                   <tr>
                     <th>会社名</th>
@@ -298,27 +297,27 @@
                     <td>
                       〒{$smarty.session.site->postal_code|default:"___-____"}
                       {$smarty.session.site->prefecture_id|default:"___"}
-                      {$smarty.session.site->municipality}
-                      {$smarty.session.site->address1}
-                      {$smarty.session.site->address2}
+                      {$smarty.session.site->municipality|default}
+                      {$smarty.session.site->address1|default}
+                      {$smarty.session.site->address2|default}
                     </td>
                   </tr>
                   <tr>
                     <th>連絡先</th>
                     <td>
-                      {if $smarty.session.site->phone_number1}<div>TEL:{$smarty.session.site->phone_number1}</div>{/if}
-                      {if $smarty.session.site->phone_number2}<div>TEL:{$smarty.session.site->phone_number2}</div>{/if}
-                      {if $smarty.session.site->fax_number}<div>FAX:{$smarty.session.site->fax_number}</div>{/if}
-                      {if $smarty.session.site->email_address}<div>メール:{$smarty.session.site->email_address}</div>{/if}
+                      {if $smarty.session.site->phone_number1|default}<div>TEL:{$smarty.session.site->phone_number1}</div>{/if}
+                      {if $smarty.session.site->phone_number2|default}<div>TEL:{$smarty.session.site->phone_number2}</div>{/if}
+                      {if $smarty.session.site->fax_number|default}<div>FAX:{$smarty.session.site->fax_number}</div>{/if}
+                      {if $smarty.session.site->email_address|default}<div>メール:{$smarty.session.site->email_address}</div>{/if}
                     </td>
                   </tr>
                   <tr>
                     <th>更新日</th>
-                    <td>{$smarty.session.site->update_date}</td>
+                    <td>{$smarty.session.site->update_date|default}</td>
                   </tr>
                   <tr>
                     <th>登録日</th>
-                    <td>{$smarty.session.site->created_date}</td>
+                    <td>{$smarty.session.site->created_date|default}</td>
                   </tr>
                 </tbody>
               </table>
@@ -332,7 +331,6 @@
               <h3 class="card-title">ログイン情報</h3>
             </div>
             <div class="card-body table-responsive p-0" style="height: 30vh;">
-              <div class="d-none">{$smarty.session.user|@print_r}</div>
               <table class="table table-head-fixed table-striped text-xs text-nowrap">
                 <tbody>
                   <tr>

@@ -1,29 +1,29 @@
 <div class="container py-5">
-  
   {* 会員ログイン／アウト *}
   {if $pageData->release_kbn == 3}
   <div class="alert alert-success">
     {if $pageData->release_password_status}
     <form action="#?" method="post">
       <label class="form-label">ログイン中：</label>
-      <input type="hidden" name="navigation_id" value="{$pageData->id}">
+      <input type="hidden" name="navigation_id" value="{$pageData->id|default}">
       <input type="hidden" name="release_password" value="_logout_">
-      <button class="btn btn-outline-secondary" type="submit">ログアウト</button>
+      <button class="btn btn-outline-secondary" type="submit">ログアウト
+      </button>
     </form>
     {else}
     <form action="#?" method="post">
       <label class="form-label">ログイン認証</label>
       <div class="input-group">
-        <input type="hidden" name="navigation_id" value="{$pageData->id}">
+        <input type="hidden" name="navigation_id" value="{$pageData->id|default}">
         <input type="text" name="release_password" class="form-control" placeholder="パスワードを入力">
-        <button class="btn btn-outline-success" type="submit">認証する</button>
+        <button class="btn btn-outline-success" type="submit">認証する
+        </button>
       </div>
     </form>
     {/if}
   </div>
   {/if}
   {* /会員ログイン／アウト *}
-  
   {* カテゴリ、絞り込みを取得 *}{o->controller name="page" action="view" assign="category" nid="{$pageData->id}" limit="1"}
   {foreach $category->row[0]->fields as $field}
   {if $field->field_type == "input_checkbox"}
@@ -38,7 +38,7 @@
   </nav>
   {/if}
   {/foreach}
-  {* 明細 *}{if $smarty.get.id}
+  {* 明細 *}{if $smarty.get.id|default}
   {assign var=detail value=$pageData->elements->row[0]}
   <dl class="mb-3 pb-5">
     <dt class="fst-2 fs-4">{$detail->name}
@@ -163,7 +163,7 @@
       <li class="page-item">…</li>
       {/if}
       {/foreach}
-      <li class="page-item {if $pageData->elements->pageNumber <= ($pageData->elements->page.page + 1)}disabled{/if}">
+      <li class="page-item {if $pageData->elements->pageNumber <= ($pageData->elements->page + 1)}disabled{/if}">
         <a class="page-link" href="?{if $pagination_link}{$pagination_link}&{/if}p={$pageData->elements->pageNumber-1}">&gt;&gt;</a>
       </li>
     </ul>

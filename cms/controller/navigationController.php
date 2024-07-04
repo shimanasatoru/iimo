@@ -12,7 +12,7 @@ class navigationController{
    * @params int $id,
    */
   public function getAction(){
-    if(!$_SESSION['site']->id){
+    if(!@$_SESSION['site']->id){
       echo json_encode(array('_status' => false));
       return false;
     }
