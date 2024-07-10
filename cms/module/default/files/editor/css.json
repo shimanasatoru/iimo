@@ -1,0 +1,11 @@
+[
+  "https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css",
+  "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css",
+  "https://iimo2.sakura.ne.jp/cms/module/default/files/js/slick/slick.css",
+  "https://iimo2.sakura.ne.jp/cms/module/default/files/js/slick/slick-theme.css",
+  "https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css",
+  "https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js",
+  "https://iimo2.sakura.ne.jp/cms/module/default/files/css/style.css",
+  "https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap",
+  "https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap"
+]

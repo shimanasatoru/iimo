@@ -3,45 +3,126 @@ namespace host\cms\repository;
 
 use host\cms\repository\dbRepository;
 use host\cms\repository\utilityRepository;
+use host\cms\repository\sitesRepository;
 
 class pageSettingRepository extends dbRepository {
   
-  use \host\cms\entity\sitesEntity;
-
+  public function __construct () {
+  }
+  
+  public $id;
+  public function setId(int $id) :void{
+    $this->id = $id;
+  }
+  public function getId(){
+    return $this->id;
+  }
+  
+  public $result;
+  public $client_editor;
+  public $system_editor;
   public function get() {
-    self::setSelect("*");
-    self::setFrom("page_setting_tbl p");
-    self::setWhere("p.delete_kbn IS NULL");
+
+    //初期化
+    $this->set_status(false);
+    $this->result = (object) array(
+      "editor_color_palette" => "",
+      "editor_css" => "[]",
+      "editor_style" => "[]",
+      "editor_template" => "[]",
+      "ga4_credentials" => "",
+      "ga4_client_email" => "",
+      "ga4_property_id" => ""
+    );
+
+    //設定データ取得
     if($id = self::getId()){
-      self::setWhere("p.id = :id");
-      self::setValue(":id", $id);
-    }
-    $q = self::getSelect().
-          self::getFrom().
-          self::getWhere().
-          self::getGroupBy().
-          self::getOrder().
-          self::getPageLimit();
-    try {
-      self::connect();
-      $stmt = self::prepare($q);
-      $stmt->execute(self::getValue());
-      $this->rowNumber = $stmt->rowCount();
-      if($this->rowNumber > 0){
-        $this->set_status(true);
+      $si = new sitesRepository;
+      $si->setId($id);
+      $si->setLimit(1);
+      $site = @$si->get()->row[0];
+      if(!$site){
+        $this->set_message("サイトがありません");
+        return $this;
       }
-      while($d = $stmt->fetch(\PDO::FETCH_OBJ)){
-        $d->editor_css = json_decode($d->editor_css);
-        $this->row[] = $d;
+
+      $this->client_editor = new \StdClass;
+      $this->system_editor = new \StdClass;
+      if($site->design_authority == "default"){
+        $system_theme_files = array(
+          (object) array(
+            'name' => 'editor_css',
+            'url' => $site->design_directory.$site->design_theme."/files/editor/css.json"
+          ),
+          (object) array(
+            'name' => 'editor_color_palette',
+            'url' => $site->design_directory.$site->design_theme."/files/editor/color_palette.json"
+          ),
+          (object) array(
+            'name' => 'editor_style',
+            'url' => $site->design_directory.$site->design_theme."/files/editor/style.json"
+          ),
+          (object) array(
+            'name' => 'editor_template',
+            'url' => $site->design_directory.$site->design_theme."/files/editor/template.json"
+          ),
+        );
+        foreach($system_theme_files as $files){
+          $file = null;
+          if (isset($files->url) && file_exists($files->url)) {
+            $file = file_get_contents($files->url, true);
+          }
+          if(isset($files->name)){
+            $this->system_editor->{$files->name} = $file;
+          }
+        }
       }
-      $stmt_allNumber = $this->prepare("SELECT FOUND_ROWS() as `allNumber`");
-      $stmt_allNumber->execute();
-      while($d = $stmt_allNumber->fetch(\PDO::FETCH_OBJ)){
-        $this->totalNumber = $d->allNumber;
+      
+      //設定ファイル取得
+      try {
+        self::connect();
+        $stmt = self::prepare("SELECT * FROM page_setting_tbl p WHERE p.id = :id AND p.delete_kbn IS NULL");
+        $stmt->bindValue(":id", $id, \PDO::PARAM_INT);
+        $stmt->execute();
+        while($d = $stmt->fetch(\PDO::FETCH_OBJ)){
+          foreach($d as $name => $value) {
+            $this->client_editor->{$name} = html_entity_decode($value, ENT_QUOTES);
+            if(in_array($name, ["ga4_credentials", "ga4_client_email", "ga4_property_id"])){
+              $this->result->{$name} = $value;
+            }
+          }
+        }
+      } catch (\Exception $e) {
+        $this->set_message($e->getMessage());
       }
-      $this->pageRange = $this->getPageRange();
-    } catch (\Exception $e) {
-      $this->set_message($e->getMessage());
+      
+      //editor_css
+      $editor_css = $this->system_editor->editor_css = json_decode($this->system_editor->editor_css);
+      $this->client_editor->editor_css = json_decode($this->client_editor->editor_css);
+      foreach($this->client_editor->editor_css as $css){
+        $editor_css[] = $css;
+      }
+      $this->result->editor_css = json_encode($editor_css);
+      
+      //editor_color_palette
+      $editor_color_palette = $this->client_editor->editor_color_palette;
+      $this->system_editor->editor_color_palette = json_decode($this->system_editor->editor_color_palette);
+      if($this->system_editor->editor_color_palette){
+        foreach($this->system_editor->editor_color_palette as $color){
+          $editor_color_palette.= substr($editor_color_palette, -1) != "," ? "," . $color : $color;
+        }
+      }
+      $this->result->editor_color_palette = $editor_color_palette;
+      
+      //editor_style
+      $editor_style = json_decode("[". $this->client_editor->editor_style ."]");
+      $this->system_editor->editor_style = json_decode($this->system_editor->editor_style);
+      if($this->system_editor->editor_style){
+        foreach($this->system_editor->editor_style as $style){
+          $editor_style[] = $style;
+        }
+      }
+      $this->result->editor_style = json_encode($editor_style, JSON_UNESCAPED_UNICODE);
     }
     return $this;
   }

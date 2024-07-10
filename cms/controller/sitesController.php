@@ -62,6 +62,7 @@ class sitesController{
     $site_id = filter_input(INPUT_GET, 'site_id', FILTER_VALIDATE_INT); 
     $site = (object) array( 'id' => null );
     $page_setting = new \stdClass;
+
     if($site_id){
       $si = new sitesRepository;
       $si->setId($site_id);
@@ -74,8 +75,9 @@ class sitesController{
       $ps = new pageSettingRepository;
       $ps->setId($site_id);
       $ps->setLimit(1);
-      $page_setting = $ps->get()->row[0];
+      $page_setting = $ps->get()->result;
     }
+
     $_SESSION['site'] = $site;
     $_SESSION['page_setting'] = $page_setting;
     $_SESSION['cms'] = $_SESSION['KCFINDER'] = new \stdClass;

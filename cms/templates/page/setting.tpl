@@ -34,7 +34,7 @@
               <label>
                 エディターへ独自CSSの埋め込み（絶対パスURL）
               </label>
-              <textarea name="editor_css" class="form-control" rows="10" placeholder="絶対パスURLで入力">{"&#13;&#10;"|implode:$setting->editor_css|default}</textarea>
+              <textarea name="editor_css" class="form-control" rows="10" placeholder="絶対パスURLで入力">{if $setting->client_editor->editor_css|default}{"&#13;&#10;"|implode:$setting->client_editor->editor_css|default}{/if}</textarea>
               <small class="form-text text-muted">
                 ※複数の場合は改行して下さい。<br>
                 ※スタイルをエディタに反映させる場合は、サイト切替を行うか、再ログインを行って下さい。
@@ -45,7 +45,7 @@
               <label>
                 エディターへ独自スタイルを追加します
               </label>
-              <textarea name="editor_style" class="form-control" rows="10" placeholder="">{$setting->editor_style|default}</textarea>
+              <textarea name="editor_style" class="form-control" rows="10" placeholder="">{$setting->client_editor->editor_style|default}</textarea>
               <div>
                 <span class="badge badge-secondary">サンプルコード</span>
                 {literal}
@@ -66,7 +66,7 @@
               <label>
                 エディターへ独自カラーパレットを追加します
               </label>
-              <textarea name="editor_color_palette" class="form-control" rows="3" placeholder="">{$setting->editor_color_palette|default}</textarea>
+              <textarea name="editor_color_palette" class="form-control" rows="3" placeholder="">{$setting->client_editor->editor_color_palette|default}</textarea>
               <div>
                 <span class="badge badge-secondary">サンプルコード</span>
                 {literal}<code>000,800000,8B4513,2F4F4F,008080,000080,4B0082,696969,B22222,A52A2A,DAA520,006400,40E0D0,0000CD,800080,808080,F00,FF8C00,FFD700,008000,0FF,00F,EE82EE,A9A9A9,FFA07A,FFA500,FFFF00,00FF00,AFEEEE,ADD8E6,DDA0DD,D3D3D3,FFF0F5,FAEBD7,FFFFE0,F0FFF0,F0FFFF,F0F8FF,E6E6FA,FFF</code>
@@ -120,10 +120,9 @@
                   <label>
                     1.認証ファイル&nbsp;<span class="badge badge-danger">必須</span>
                   </label>
-                  
                   <div class="input-group">
                     <div class="input-group-prepend">
-                      {if $setting->ga4_credentials|default}
+                      {if $setting->result->ga4_credentials|default}
                       <span class="input-group-text bg-success">設置済</span>
                       {else}
                       <span class="input-group-text">未設置</span>
@@ -135,7 +134,7 @@
                       <small class="form-text text-muted">※枠内にドロップすることもできます</small>
                     </div>
                   </div>
-                  {if $setting->ga4_credentials|default}
+                  {if $setting->result->ga4_credentials|default}
                   <div class="form-check">
                     <input id="ga4_credentials_delete" type="checkbox" name="ga4_credentials_delete" value="1" class="form-check-input">
                     <label for="ga4_credentials_delete" class="form-check-label text-secondary small">削除する</label>
@@ -165,13 +164,13 @@
                   
                   <div class="input-group">
                     <div class="input-group-prepend">
-                      {if $setting->ga4_client_email|default}
+                      {if $setting->result->ga4_client_email|default}
                       <span class="input-group-text bg-success">取得済</span>
                       {else}
                       <span class="input-group-text">未取得</span>
                       {/if}
                     </div>
-                    <input type="text" class="form-control form-control-border" placeholder="認証ファイルから取得" value="{$setting->ga4_client_email|default}" readonly>
+                    <input type="text" class="form-control form-control-border" placeholder="認証ファイルから取得" value="{$setting->result->ga4_client_email|default}" readonly>
                   </div>
                   <div class="form-text alert alert-secondary">
                     <ol class="list-unstyled m-0">
@@ -190,7 +189,7 @@
                   <label>
                     3.プロパティID&nbsp;<span class="badge badge-danger">必須</span>
                   </label>
-                  <input type="text" name="ga4_property_id" class="form-control form-control-border" placeholder="プロパティIDを入力" value="{$setting->ga4_property_id|default}">
+                  <input type="text" name="ga4_property_id" class="form-control form-control-border" placeholder="プロパティIDを入力" value="{$setting->result->ga4_property_id|default}">
                   <div class="form-text alert alert-secondary">
                     <ol class="list-unstyled m-0">
                       <li>アナリティクスのプロパティIDを登録</li>

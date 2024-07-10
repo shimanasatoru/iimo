@@ -60,8 +60,8 @@
   const ADDRESS_SITE = '{$smarty.const.ADDRESS_SITE}';
   const query_string = '{$smarty.server.QUERY_STRING}';
   const navigation_id = '{$navigation->id|default:null}';
-  const content_css = ["{if $smarty.session.page_setting->editor_css|default}{'","'|implode:$smarty.session.page_setting->editor_css}{/if}"];
-  const styleset_add = [{$smarty.session.page_setting->editor_style|default|unescape|replace:"&#13;":""|replace:"&#10;":""}];
+  const content_css = {if $smarty.session.page_setting->editor_css|default}{$smarty.session.page_setting->editor_css}{else}''{/if};
+  const styleset_add = {if $smarty.session.page_setting->editor_style|default}{$smarty.session.page_setting->editor_style}{else}''{/if};
   const colorButton_colors = '{$smarty.session.page_setting->editor_color_palette|default}';
 </script>
 <script src="{$smarty.const.ADDRESS_CMS}dist/plugins/jquery/jquery.min.js"></script>

@@ -254,7 +254,7 @@ class pageController{
     
     $p = new pageSettingRepository;
     $p->setId($_SESSION['site']->id);
-    $setting = $p->get()->row[0];
+    $setting = $p->get();
 
     $tpl = new Smarty;
     $au = new \autoload;

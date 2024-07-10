@@ -1,0 +1,19 @@
+[
+  { "name": "強太字", "element": "span", "attributes": {"class": "fw-bolder"} },
+  { "name": "超強太字", "element": "span", "attributes": {"style": "font-weight:900;"} },
+  { "name": "文字サイズ（D1）", "element": "span", "attributes": {"class": "display-1"} },
+  { "name": "文字サイズ（D2）", "element": "span", "attributes": {"class": "display-2"} },
+  { "name": "文字サイズ（D3）", "element": "span", "attributes": {"class": "display-3"} },
+  { "name": "文字サイズ（D4）", "element": "span", "attributes": {"class": "display-4"} },
+  { "name": "文字サイズ（D5）", "element": "span", "attributes": {"class": "display-5"} },
+  { "name": "文字間（LS0）", "element": "span", "attributes": {"class": "ls-0"} },
+  { "name": "文字間（LS1）", "element": "span", "attributes": {"class": "ls-1"} },
+  { "name": "文字間（LS2）", "element": "span", "attributes": {"class": "ls-2"} },
+  { "name": "文字間（LS3）", "element": "span", "attributes": {"class": "ls-3"} },
+  { "name": "文字間（LS4）", "element": "span", "attributes": {"class": "ls-4"} },
+  { "name": "文字間（LS5）", "element": "span", "attributes": {"class": "ls-5"} },
+  { "name": "見出しスタイル１", "element": "span", "attributes": {"class": "fst-1"} },
+  { "name": "見出しスタイル２", "element": "span", "attributes": {"class": "fst-2"} },
+  { "name": "見出しスタイル３", "element": "span", "attributes": {"class": "fst-3"} },
+  { "name": "見出しスタイル４", "element": "span", "attributes": {"class": "fst-4"} }
+]

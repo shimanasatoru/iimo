@@ -79,6 +79,6 @@
     </script>
     <script type="text/javascript" src="{$siteData->design_address}{$siteData->design_theme}/files/js/slick/slick.min.js">
     </script>
-    {$siteData->header_code|unescape|replace:"&#13;":""|replace:"&#10;":""|default}
+    {$siteData->header_code|default|unescape|replace:"&#13;":""|replace:"&#10;":""}
   </head>
   <body>
