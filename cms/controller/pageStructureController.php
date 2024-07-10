@@ -134,9 +134,6 @@ class pageStructureController{
       $p->setModuleId($module_id);
     }
     $p->preview();
-    
-    print_r($p);
-    
     return false;
   }
   

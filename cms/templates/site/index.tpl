@@ -67,7 +67,7 @@
                     <td class="text-muted text-xs">{$d->directory}</td>
                     <td class="text-muted text-xs">{$d->design_authority}</td>
                     <td class="text-muted text-xs">{$d->design_theme}</td>
-                    <td class="text-muted text-xs">{"、"|implode:$d->account_name|default:null}</td>
+                    <td class="text-muted text-xs">{if $d->account_name|default}{"、"|implode:$d->account_name}{/if}</td>
                   </tr>
                   {/foreach}
                 </tbody>
