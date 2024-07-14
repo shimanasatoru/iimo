@@ -17,15 +17,15 @@
               <h6 class="dropdown-header">復元日時</h6>
               <div class="dropdown-divider"></div>
               <ul class="list-unstyled mb-0">
-                {foreach $restore->row as $re}
+                {foreach $restore->row|default as $re}
                 <li>
-                  {if $smarty.get.bk_id != $re->bk_id}
+                  {if $smarty.get.bk_id|default != $re->bk_id|default}
                   <a class="dropdown-item" href="?bk_id={$re->bk_id}">
                     {$re->update_date|date_format:"%Y年%m月%d日 %H:%M:%S"}
                   </a>
                   {else}
                   <a class="dropdown-item disabled bg-secondary" href="#">
-                    {$re->update_date|date_format:"%Y年%m月%d日 %H:%M:%S"}
+                    {$re->update_date|default|date_format:"%Y年%m月%d日 %H:%M:%S"}
                   </a>
                   {/if}
                 </li>

@@ -10,6 +10,7 @@ class sitesRepository extends dbRepository {
 
   public function get() {
     self::setSelect("s.*, 
+      pref.name AS prefecture_name,
       GROUP_CONCAT(COALESCE(sta.id, '') ORDER BY sta.rank ASC SEPARATOR '{tab}') AS site_to_account_id,
       GROUP_CONCAT(COALESCE(sta.rank, '') ORDER BY sta.rank ASC SEPARATOR '{tab}') AS account_rank,
       GROUP_CONCAT(COALESCE(sta.account_id, '') ORDER BY sta.rank ASC SEPARATOR '{tab}') AS account_id,
@@ -17,6 +18,7 @@ class sitesRepository extends dbRepository {
       GROUP_CONCAT(COALESCE(a.name, '') ORDER BY sta.rank ASC SEPARATOR '{tab}') AS account_name 
     ");
     self::setFrom("site_tbl s 
+      LEFT JOIN m_prefectures_tbl pref ON pref.id = s.prefecture_id 
       LEFT JOIN site_to_account_tbl sta ON sta.site_id = s.id AND sta.delete_kbn IS NULL 
       LEFT JOIN account_tbl a ON sta.account_id = a.id AND a.delete_kbn IS NULL 
     ");
@@ -295,7 +297,7 @@ class sitesRepository extends dbRepository {
         }
 
         //アカウント操作
-        if($post['accounts']){
+        if(isset($post['accounts']) && $post['accounts']){
           $q_accounts = $this->createQuerySiteToAccount($post['accounts']);
           if($q_accounts['query']){
             foreach($q_accounts['query'] as $k => $query){

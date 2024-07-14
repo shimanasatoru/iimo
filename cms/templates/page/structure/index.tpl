@@ -190,7 +190,7 @@
           'const ADDRESS_SITE = \'{/literal}{$smarty.const.ADDRESS_SITE}{literal}\';' +
           'const content_css = {/literal}{if $smarty.session.page_setting->editor_css|default}{$smarty.session.page_setting->editor_css}{else}\'\'{/if}{literal};' +
           'const styleset_add = {/literal}{if $smarty.session.page_setting->editor_style|default}{$smarty.session.page_setting->editor_style}{else}\'\'{/if}{literal};' +
-          'const colorButton_colors = \'{/literal}{$smarty.session.page_setting->editor_color_palette}{literal}\';' +
+          'const colorButton_colors = \'{/literal}{$smarty.session.page_setting->editor_color_palette|default}{literal}\';' +
         '<\/script>'+
         '<script src="{/literal}{$smarty.const.ADDRESS_CMS}{literal}dist/plugins/ckeditor_4_22_1/ckeditor.js?20240209"><\/script>'+
         '<script src="{/literal}{$smarty.const.ADDRESS_CMS}{literal}dist/js/rgbcolor.js"><\/script>'+

@@ -99,8 +99,10 @@ class pageSettingRepository extends dbRepository {
       //editor_css
       $editor_css = $this->system_editor->editor_css = json_decode($this->system_editor->editor_css);
       $this->client_editor->editor_css = json_decode($this->client_editor->editor_css);
-      foreach($this->client_editor->editor_css as $css){
-        $editor_css[] = $css;
+      if($this->client_editor->editor_css){
+        foreach($this->client_editor->editor_css as $css){
+          $editor_css[] = $css;
+        }
       }
       $this->result->editor_css = json_encode($editor_css);
       

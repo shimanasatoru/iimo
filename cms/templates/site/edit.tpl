@@ -271,16 +271,12 @@
                         </div>
                         {if $data->logo_image|default}
                         <div class="form-check">
-                          <input id="logo_image_delete" type="checkbox" name="logo_image_delete" value="{$data->logo_image}" class="form-check-input">
+                          <input id="logo_image_delete" type="checkbox" name="logo_image_delete" value="1" class="form-check-input">
                           <label for="logo_image_delete" class="form-check-label text-secondary small">削除する</label>
                         </div>
                         {/if}
                       </div>
                     </div>
-                    
-                    
-                    
-                    
                   </div>
                 </div>
               </fieldset>
