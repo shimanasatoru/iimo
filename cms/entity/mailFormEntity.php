@@ -78,6 +78,10 @@ trait mailFormEntity{
         'filter' => FILTER_SANITIZE_SPECIAL_CHARS,
         'options'=> array('default'=>null)
       ],
+      'use_confirmation' => [
+        'filter' => FILTER_VALIDATE_INT,
+        'options'=> array('default'=>null)
+      ],
       'delete_kbn' => [
         'filter' => FILTER_VALIDATE_INT,
         'options'=> array('default'=>null)

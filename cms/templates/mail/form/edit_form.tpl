@@ -31,7 +31,7 @@
           <div class="alert alert-danger small" style="display: none"></div>
           <fieldset>
             <div class="row">
-              <div class="name col-lg-10 form-group">
+              <div class="name col-lg-8 form-group">
                 <label>
                   フォーム名&nbsp;<span class="badge badge-danger">必須</span>
                 </label>
@@ -43,6 +43,13 @@
                   <option value="1" {if $data->release_kbn|default == 1}selected{/if}>公開する</option>
                   <option value="2" {if $data->release_kbn|default == 2}selected{/if}>編集者にのみ公開する</option>
                   <option value="0" {if $data->release_kbn|default != null && $data->release_kbn == 0}selected{/if}>下書き</option>
+                </select>
+              </div>
+              <div class="col-lg-2 use_confirmation form-group">
+                <label>確認画面を使用する</label>
+                <select name="use_confirmation" class="form-control form-control-border">
+                  <option value="null" {if !$data->use_confirmation|default}selected{/if}>使用しない</option>
+                  <option value="1" {if $data->use_confirmation|default == 1}selected{/if}>使用する</option>
                 </select>
               </div>
             </div>
@@ -101,7 +108,7 @@
                   </small>
                 </div>
               </div>
-              <div class="col-lg-12">
+              <div class="col-lg-6">
                 <div class="g_recaptcha_v3_sitekey form-group">
                   <label>
                     google reCAPTCHA/V3 サイトキー
@@ -109,7 +116,7 @@
                   <input type="text" name="g_recaptcha_v3_sitekey" class="form-control form-control-border" placeholder="サイトキー" value="{$data->g_recaptcha_v3_sitekey|default}">
                 </div>
               </div>
-              <div class="col-lg-12">
+              <div class="col-lg-6">
                 <div class="g_recaptcha_v3_secretkey form-group">
                   <label>
                     google reCAPTCHA/V3 シークレットキー
