@@ -181,8 +181,8 @@ if($('#ckeditor_source').length){
     startupMode: 'source'
   });
 }
-if($('.ckeditor_source').length){
-  CKEDITOR.replaceAll('ckeditor_source', {
+if($('.cke_source').length){
+  CKEDITOR.replaceAll('cke_source', {
     toolbarStartupExpanded: false,
     startupMode: 'source'
   });
