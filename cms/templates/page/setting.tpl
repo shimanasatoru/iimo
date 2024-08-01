@@ -16,7 +16,7 @@
   </div>
 
   <!-- Main content -->
-  <section id="content" class="container-fluid">    
+  <section id="content" class="container-fluid">
     <div>
       <form id="settingForm" method="post" action="?{$smarty.server.QUERY_STRING}" enctype="multipart/form-data" onSubmit="return false;">
         <div class="alert alert-danger small" style="display: none"></div>

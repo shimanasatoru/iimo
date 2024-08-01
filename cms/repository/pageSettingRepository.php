@@ -97,7 +97,7 @@ class pageSettingRepository extends dbRepository {
       }
       
       //editor_css
-      $editor_css = $this->system_editor->editor_css = json_decode($this->system_editor->editor_css);
+      $editor_css = $this->system_editor->editor_css = json_decode(@$this->system_editor->editor_css);
       $this->client_editor->editor_css = json_decode($this->client_editor->editor_css);
       if($this->client_editor->editor_css){
         foreach($this->client_editor->editor_css as $css){
@@ -108,7 +108,7 @@ class pageSettingRepository extends dbRepository {
       
       //editor_color_palette
       $editor_color_palette = $this->client_editor->editor_color_palette;
-      $this->system_editor->editor_color_palette = json_decode($this->system_editor->editor_color_palette);
+      $this->system_editor->editor_color_palette = json_decode(@$this->system_editor->editor_color_palette);
       if($this->system_editor->editor_color_palette){
         foreach($this->system_editor->editor_color_palette as $color){
           $editor_color_palette.= substr($editor_color_palette, -1) != "," ? "," . $color : $color;
@@ -118,7 +118,7 @@ class pageSettingRepository extends dbRepository {
       
       //editor_style
       $editor_style = json_decode("[". $this->client_editor->editor_style ."]");
-      $this->system_editor->editor_style = json_decode($this->system_editor->editor_style);
+      $this->system_editor->editor_style = json_decode(@$this->system_editor->editor_style);
       if($this->system_editor->editor_style){
         foreach($this->system_editor->editor_style as $style){
           $editor_style[] = $style;
