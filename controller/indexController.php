@@ -239,11 +239,8 @@ class indexController{
       //全文検索
       if(@$request['keyword']){
         $p = new pageRepository;
-        $p->setSiteId($site_id);
-        if(!$this->getPreviewFlg()){
-          $p->setReleaseKbn(1);
-        }
         $p->setKeyword($request['keyword']);
+        $p->setPageUrl($data->uri);
         $data->elements = $p->getSearchResults();
         return $data;
       }

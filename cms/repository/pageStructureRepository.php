@@ -3,6 +3,7 @@ namespace host\cms\repository;
 
 use host\cms\repository\dbRepository;
 use host\cms\repository\utilityRepository;
+use host\cms\repository\sitesRepository;
 use host\cms\repository\fieldRepository;
 use host\cms\repository\pageRepository;
 
@@ -162,7 +163,7 @@ class pageStructureRepository extends dbRepository {
       }
       
       //複製
-      $stmt = $this->prepare("INSERT INTO page_structure_bk ( id, site_id, navigation_id, module_id, account_id, rank, release_kbn, release_start_date, release_end_date, name, html, htmlparts, o_navigation_id, meta_description, meta_keywords, delete_kbn, update_date, created_date ) ( SELECT * FROM page_structure_tbl WHERE id = :id )");
+      $stmt = $this->prepare("INSERT INTO page_structure_bk ( id, site_id, navigation_id, module_id, account_id, rank, release_kbn, release_start_date, release_end_date, name, html, htmlparts, o_navigation_id, o_navigation_limit, meta_description, meta_keywords, delete_kbn, update_date, created_date ) ( SELECT * FROM page_structure_tbl WHERE id = :id )");
       if(!$stmt->execute([
         ':id'=> $this->_lastId
       ])){
@@ -177,6 +178,9 @@ class pageStructureRepository extends dbRepository {
     $this->commit();
     //キャッシュクリア
     $ut->smartyClearAllCache();
+    //サイトマップ更新フラグ付与
+    $si = new sitesRepository;
+    $si->changeSitemapFlag(['id'=> $push['site_id'], 'flag'=> true]);
     $this->set_status(true);
     return $this;
   }
@@ -216,6 +220,9 @@ class pageStructureRepository extends dbRepository {
     $this->commit();
     //キャッシュクリア
     $ut->smartyClearAllCache();
+    //サイトマップ更新フラグ付与
+    $si = new sitesRepository;
+    $si->changeSitemapFlag(['id'=> $push['site_id'], 'flag'=> true]);
     return $this;
   }
   

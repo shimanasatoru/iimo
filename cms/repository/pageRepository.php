@@ -3,6 +3,7 @@ namespace host\cms\repository;
 
 use host\cms\repository\dbRepository;
 use host\cms\repository\utilityRepository;
+use host\cms\repository\sitesRepository;
 use host\cms\repository\fieldRepository;
 
 use host\cms\repository\navigationRepository;
@@ -28,111 +29,32 @@ class pageRepository extends dbRepository {
     return $array;
   }
   
-  
+  /*
+   * 検索結果処理
+   */
   public function getSearchResults() {
-    
-    $site_id = self::getSiteId();
+    $page_uri = self::getPageUrl();
     $keyword = self::getKeyword();
-    if(!$site_id || !$keyword){
+    $file_uri = $page_uri."sitesearch.json";
+    if(!file_exists($file_uri) || !$keyword){
       return $this;
     }
     
-    self::setValue(":release_kbn", 1);
-    self::setValue(":site_id", $site_id);      
-    self::setWhere("n.site_id = :site_id");
-    self::setWhere("ps.delete_kbn is null");
-    self::setWhere("(ps.release_start_date IS NULL || now() >= ps.release_start_date) AND (ps.release_end_date IS NULL || now() <= ps.release_end_date)");
-
     $keyword = preg_split("/( |　)+/", $keyword);
-    foreach($keyword as $i => $val){
-      $value.= ($value ? ' || ' : '') . "ps.name LIKE :keyword{$i} || ps.value LIKE :keyword{$i}";
-      self::setValue(":keyword{$i}", "%{$val}%");
-    }
-    self::setWhere("({$value})");
-
-    $q = "
-    WITH recursive child(depth, id, parent_id, site_id, page_id, name, directory_name) AS(
-      SELECT
-        0,
-        n.id,
-        n.parent_id,
-        n.site_id,
-        ps.id as page_id,
-        ps.name,
-        n.directory_name
-      FROM
-        ( SELECT p.id, p.navigation_id, p.name, p.release_kbn, p.release_start_date, p.release_end_date, pc.value, pc.delete_kbn
-          FROM page_content_tbl pc
-          LEFT JOIN page_tbl p ON p.id = pc.page_id AND p.delete_kbn is null
-          UNION ALL
-          SELECT '', st.navigation_id, n.name, st.release_kbn, st.release_start_date, st.release_end_date, st.html as value, st.delete_kbn
-          FROM page_structure_tbl st 
-          LEFT JOIN navigation_tbl n ON n.id = st.navigation_id AND st.delete_kbn is null
-        ) as ps 
-      LEFT JOIN 
-        navigation_tbl n ON n.id = ps.navigation_id
-        AND n.delete_kbn is null
-      ". self::getWhere() ."
-      UNION ALL
-      SELECT
-        child.depth + 1,
-        n.id,
-        n.parent_id,
-        n.site_id,
-        null,
-        n.name,
-        n.directory_name
-      FROM
-        navigation_tbl n, child
-      WHERE
-        n.id = child.parent_id
-    ) 
-    SELECT
-      depth,
-      id,
-      parent_id,
-      site_id,
-      page_id,
-      name,
-      directory_name
-    FROM
-      child
-    ORDER BY
-      depth DESC
-    ";
-    try {
-      self::connect();
-      $stmt = self::prepare($q);
-      $stmt->execute(self::getValue());
-      while($d = $stmt->fetch(\PDO::FETCH_OBJ)){
-        $parent_id = $d->parent_id ? $d->parent_id : 0;
-        $array_id = $d->page_id ? $d->page_id : $d->id;
-        $array[$array_id] = $d;
-      }
-
-      $page = array();
-      if($array){
-        foreach($array as $key => $ary){
-          if($ary->depth == 0){
-            $ary->directory = (object) $this->currentUpperDir($array, $key);
-            $page[] = $ary;
-          }
+    $json = json_decode( file_get_contents($file_uri) );
+    $this->row = array_filter($json, function($item) use ($keyword) {
+      $item->directory_path_name_array = (array) $item->directory_path_name_array;
+      foreach ($keyword as $value) {
+        if (strpos($item->name, $value) !== false) {
+          return true;
+        }
+        if (strpos($item->content, $value) !== false) {
+          return true;
         }
       }
-      $this->row = $page;
-      $this->rowNumber = $stmt->rowCount();
-      if($this->rowNumber > 0){
-        $this->set_status(true);
-      }
-      $stmt_allNumber = $this->prepare("SELECT FOUND_ROWS() as `allNumber`");
-      $stmt_allNumber->execute();
-      while($d = $stmt_allNumber->fetch(\PDO::FETCH_OBJ)){
-        $this->totalNumber = $d->allNumber;
-      }
-      $this->pageRange = $this->getPageRange();
-    } catch (\Exception $e) {
-      $this->set_message($e->getMessage());
-    }
+      return false;
+    });
+    $this->rowNumber = count($this->row);
     return $this;
   }
   
@@ -669,6 +591,9 @@ class pageRepository extends dbRepository {
     $this->commit();
     //キャッシュクリア
     $ut->smartyClearAllCache();
+    //サイトマップ更新フラグ付与
+    $si = new sitesRepository;
+    $si->changeSitemapFlag(['id'=> $push['site_id'], 'flag'=> true]);
     return $this;
   }
   
@@ -707,6 +632,9 @@ class pageRepository extends dbRepository {
     $this->commit();
     //キャッシュクリア
     $ut->smartyClearAllCache();
+    //サイトマップ更新フラグ付与
+    $si = new sitesRepository;
+    $si->changeSitemapFlag(['id'=> $push['site_id'], 'flag'=> true]);
     return $this;
   }
   

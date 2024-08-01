@@ -3,7 +3,9 @@ namespace host\cms\repository;
 
 use host\cms\repository\dbRepository;
 use host\cms\repository\utilityRepository;
+use host\cms\repository\sitesRepository;
 use host\cms\repository\pageRepository;
+use host\cms\repository\pageStructureRepository;
 
 class navigationRepository extends dbRepository {
   
@@ -307,6 +309,9 @@ class navigationRepository extends dbRepository {
     $this->directoryPathCreate();
     //キャッシュクリア
     $ut->smartyClearAllCache();
+    //サイトマップ更新フラグ付与
+    $si = new sitesRepository;
+    $si->changeSitemapFlag(['id'=> $push->data->site_id, 'flag'=> true]);
     return $this;
   }
   
@@ -347,7 +352,10 @@ class navigationRepository extends dbRepository {
     $this->setSiteId($push->data->site_id);
     $this->directoryPathCreate();
     //キャッシュクリア
-    $ut->smartyClearAllCache();    
+    $ut->smartyClearAllCache();
+    //サイトマップ更新フラグ付与
+    $si = new sitesRepository;
+    $si->changeSitemapFlag(['id'=> $push->data->site_id, 'flag'=> true]);
     return $this;
   }
   
@@ -401,7 +409,7 @@ class navigationRepository extends dbRepository {
     $push = $this->getPost();
     $query = array();
     $params = array();
-    if($push->accounts->account_id){
+    if(isset($push->accounts->account_id) && $push->accounts->account_id){
       $rank = 0;
       foreach($push->accounts->account_id as $k => $account_id){
         $query[] = 'INSERT INTO navigation_to_account_tbl ( 
@@ -423,21 +431,56 @@ class navigationRepository extends dbRepository {
     return array('query' => $query, 'params' => $params);
   }
 
-  public function treeDecode($data){
+  public function treeDecode($data, $level = 0, $directory_path_name = array()){
     $tree = array();
     if($data){
       foreach($data as $d){
-        $d->page_data = array();
-        if($d->id && $d->url){
+        $d->page_data = array();//リストページ配列
+        $d->directory_path_name_array = array();//ディレクトリごとのページ名配列
+        $d->content = "";//サイト検索のためのテキスト羅列
+
+        //ディレクトリごとのページ名
+        if($level > 0){
+          $directory_path_name[$level] = $d->name;
+          $d->directory_path_name_array = $directory_path_name;
+        }
+
+        if($d->format_type != "fixedFormat" && $d->id && $d->url){
           $pages = new pageRepository;
           $pages->setNavigationId($d->id);
           $pages->setPageUrl($d->url);
           $d->page_data = $pages->get()->row;
+          foreach($d->page_data as $page){
+            $page->directory_path_name_array = array();
+            if($level > 0){
+              $page->directory_path_name_array = $d->directory_path_name_array + array($page->name);
+            }
+            $page->content = "";
+            foreach($page->fields as $field){
+              if(is_array($field->value)){
+                foreach($field->value as $value){
+                  $page->content.= is_array($value) ? implode(",", $value) : $value;
+                }
+              }else{
+                $page->content.= $field->value;
+              }
+            }
+            $page->content = preg_replace('/[\s\'"]+/', '', strip_tags(html_entity_decode($page->content)));
+          }
+        }
+        
+        if($d->format_type == "fixedFormat" && $d->id && $d->url){
+          $structures = new pageStructureRepository;
+          $structures->setNavigationId($d->id);
+          $structures->setReleaseKbn(1);
+          foreach($structures->get()->row as $row){
+            $d->content.= preg_replace('/[\s\'"]+/', '', strip_tags(html_entity_decode($row->html)));
+          }
         }
         
         $tree[] = $d;
         if(property_exists($d, "children") && $d->children){
-          $tree = array_merge($tree, $this->treeDecode($d->children));
+          $tree = array_merge($tree, $this->treeDecode($d->children, $level + 1, $directory_path_name));
           unset($d->children);
         }
       }
@@ -445,6 +488,9 @@ class navigationRepository extends dbRepository {
     return $tree;
   }
 
+  /*
+   * サイトマップを生成（sitemap.xml）
+   */
   public function sitemapCodeUrlCreate($url, $update_date){
     //(&)はエラーとなるため、一旦&に戻して再置換
     $url = preg_replace('/&/', '&amp;', preg_replace('/&amp;/', '&', $url));
@@ -455,11 +501,12 @@ class navigationRepository extends dbRepository {
         "<lastmod>{$update_date}</lastmod>".
       "</url>";
   }
-  
   public function sitemapCreate(){
     if(!$this->getSiteId()){
       return false;
     }
+    $this->setReleaseKbn(1);
+    $this->setOrder("rank ASC");
     $data = $this->get()->row;
     if(!$data[0]){
       return false;
@@ -490,6 +537,61 @@ class navigationRepository extends dbRepository {
       }
     }
     $code.= '</urlset>';
+    if(file_put_contents($upload_dir.$file_name, $code)){
+      return true;
+    }
+    return false;
+  }
+  
+  /*
+   * サイト検索用データを生成（sitesearch.json）
+   */
+  public function sitesearchCodeUrlCreate($name, $directory_path_name_array, $content, $url, $update_date){
+    //(&)はエラーとなるため、一旦&に戻して再置換
+    $url = preg_replace('/&/', '&amp;', preg_replace('/&amp;/', '&', $url));
+    $directory_path_name_array = json_encode( $directory_path_name_array, JSON_UNESCAPED_UNICODE);
+    return 
+      "{" .
+        "\"name\": \"{$name}\", " .
+        "\"directory_path_name_array\": {$directory_path_name_array}, " .
+        "\"content\": \"{$content}\", " .
+        "\"url\": \"{$url}\", " .
+        "\"update_date\": \"{$update_date}\"" .
+      "},";
+  }
+  public function sitesearchCreate(){
+    if(!$this->getSiteId()){
+      return false;
+    }
+    $this->setReleaseKbn(1);
+    $this->setOrder("rank ASC");
+    $data = $this->get()->row;
+    if(!$data[0]){
+      return false;
+    }
+    if(!$data[0]->uri){
+      return false;
+    }
+
+    $upload_dir = $data[0]->uri;
+    $file_name = "sitesearch.json";
+    $code = '[';
+    if($decode = $this->treeDecode($data)){
+      foreach($decode as $d){
+        //リンクフォーマットは除外
+        if($d->format_type == "link"){
+          continue;
+        }
+        $code.= $this->sitesearchCodeUrlCreate($d->name, $d->directory_path_name_array, $d->content, $d->url, $d->update_date);
+        if($d->page_data){
+          foreach($d->page_data as $p){
+            $code.= $this->sitesearchCodeUrlCreate($p->name, $p->directory_path_name_array, $p->content, $p->page_url, $p->release_start_date);
+          }
+        }
+      }
+    }
+    $code = rtrim($code, ",");
+    $code.= ']';
     if(file_put_contents($upload_dir.$file_name, $code)){
       return true;
     }

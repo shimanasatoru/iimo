@@ -56,6 +56,7 @@
 </div>{* wrapper *}
 
 <script>
+  const site_id = '{$smarty.session.site->id|default}';
   const ADDRESS_CMS = '{$smarty.const.ADDRESS_CMS}';
   const ADDRESS_SITE = '{$smarty.const.ADDRESS_SITE}';
   const query_string = '{$smarty.server.QUERY_STRING}';
@@ -150,6 +151,30 @@
       }
     });
     return html;
+  }
+  
+  badgeGet();
+  function badgeGet(){
+    var e = {
+      params: {
+        type: 'GET',
+        url: ADDRESS_CMS + 'sites/get/?id='+ site_id +'&dataType=json',
+        data: null,
+        dataType: 'json'
+      },
+      doneName: badgeDone
+    }
+    push(e);
+  }
+  function badgeDone(d){
+    let data = d.row[0];
+    if(data){
+      if(data.sitemap_flag){
+        $('#sitemap-flag').addClass('badge-danger').removeClass('badge-success').text("不一致");
+      }else{
+        $('#sitemap-flag').removeClass('badge-danger').addClass('badge-success').text("一致");
+      }
+    }
   }
   {/literal}
 </script>

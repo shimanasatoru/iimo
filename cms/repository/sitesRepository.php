@@ -360,5 +360,41 @@ class sitesRepository extends dbRepository {
     return array('query' => $query, 'params' => $params);
   }
   
+  /*
+   * サイトマップ更新フラグの処理
+   */
+  public function changeSitemapFlag(array $data){
+    $values = filter_var_array($data, [
+      'id' => [
+        'filter' => FILTER_VALIDATE_INT,
+        'options'=> array('default'=>null)
+      ],
+      'flag' => [
+        'filter' => FILTER_VALIDATE_BOOLEAN,
+        'options'=> array('default'=>null)
+      ]
+    ]);
+    if(!is_int($values['id'])){
+      $this->set_message("サイトIDがありません。");
+      return $this;
+    }
+    $this->connect();
+    try {
+      $query = "UPDATE site_tbl SET sitemap_flag = :flag WHERE id = :id LIMIT 1";
+      $stmt = $this->prepare($query);
+      $stmt->bindParam(':id', $values['id'], \PDO::PARAM_INT);
+      $stmt->bindParam(':flag', $values['flag'], \PDO::PARAM_BOOL);
+      if($stmt->execute()){
+        $this->set_status(true);
+      }else{
+        $this->rollBack();
+      }
+    } catch (\PDOException $e){
+      $this->rollBack();
+      exit($e->getMessage());
+    }
+    return $this;
+  }
+  
 }
 // ?>

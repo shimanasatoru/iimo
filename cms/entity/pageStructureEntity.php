@@ -75,6 +75,10 @@ trait pageStructureEntity{
         'filter' => FILTER_VALIDATE_INT,
         'options'=> array('default'=>null)
       ],
+      'o_navigation_limit' => [
+        'filter' => FILTER_VALIDATE_INT,
+        'options'=> array('default'=>null)
+      ],
       'delete_kbn' => [
         'filter' => FILTER_VALIDATE_INT,
         'options'=> array('default'=>null)

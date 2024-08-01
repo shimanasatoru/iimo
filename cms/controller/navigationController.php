@@ -2,6 +2,7 @@
 namespace controller;
 
 use host\cms\repository\utilityRepository;
+use host\cms\repository\sitesRepository;
 use host\cms\repository\navigationRepository;
 use Smarty;
 
@@ -63,17 +64,25 @@ class navigationController{
     $n->directoryPathCreate();
   }
   
+  /*
+   * サイトマップ, サイト検索用データ生成アクション
+   */
   public function sitemapCreateAction($reload = true){
     if(!$_SESSION['site']->id){
       return print "サイトを選択して下さい";
     }
-    
+    $site_id = $_SESSION['site']->id;
+
     $n = new navigationRepository;
-    $n->setSiteId($_SESSION['site']->id);
-    $n->setReleaseKbn(1);
-    $n->setOrder("rank ASC");
-    if($reload && $n->sitemapCreate()){
-      $address = ADDRESS_CMS.'?reload';
+    $n->setSiteId($site_id);
+    $n->sitemapCreate(); //sitemap.xml
+    $n->sitesearchCreate(); //sitesearch.json
+    
+    //サイトマップ更新フラグ付与
+    $si = new sitesRepository;
+    $si->changeSitemapFlag(['id'=> $site_id, 'flag'=> false]);
+    if($reload){
+      $address = $_SERVER['HTTP_REFERER'];
       header("Location: {$address}", true , 301);
     }
   }
@@ -199,11 +208,6 @@ class navigationController{
         $result = $n->push();
         break;
     }
-    
-    if($result->_status == true){
-      $this->sitemapCreateAction(false); //サイトマップ生成
-    }    
-    
     $dataType = filter_input( INPUT_GET, 'dataType', FILTER_SANITIZE_SPECIAL_CHARS);
     if($dataType == 'json'){
       echo json_encode($result, JSON_UNESCAPED_UNICODE);

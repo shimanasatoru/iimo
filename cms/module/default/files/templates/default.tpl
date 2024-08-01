@@ -12,6 +12,9 @@
 {/function}
 {* /パンくず出力関数 *}
 {* ナビテンプレート取得 *}{if !$previewFlg || (isset($smarty.get.preview) && $smarty.get.preview == 1)}{include file="{$siteData->design_directory}{$siteData->design_theme}/files/templates/header_navigation.tpl"}{/if}
+{if $smarty.get.keyword|default}
+{include file="{$siteData->design_directory}default/files/templates/module/search_results.tpl"}
+{else}
 {if $pageData->structures->row}
 {foreach $pageData->structures->row|default as $structures}
 {if $structures->module_type|default == "template" && $structures->template|default}
@@ -43,6 +46,7 @@
     </div>
   </div>
 </div>
+{/if}
 {/if}
 {if !$previewFlg || (isset($smarty.get.preview) && $smarty.get.preview == 1)}{include file="{$siteData->design_directory}{$siteData->design_theme}/files/templates/footer_navigation.tpl"}{/if}
 {include file="{$siteData->design_directory}{$siteData->design_theme}/files/templates/footer.tpl"}

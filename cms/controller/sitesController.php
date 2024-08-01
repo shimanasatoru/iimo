@@ -26,6 +26,9 @@ class sitesController{
       default:
         exit;
     }
+    if($id = filter_input(INPUT_GET, 'id')){
+      $si->setId($id);
+    }
     if($keyword = filter_input(INPUT_GET, 'keyword')){
       $si->setKeyword($keyword);
     }

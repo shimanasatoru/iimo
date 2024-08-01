@@ -29,6 +29,7 @@
     <i class="nav-icon fas fa-redo-alt fa-fw"></i>
     <p>
       サイトマップ更新
+      <span id="sitemap-flag" class="right badge">{* jquery *}</span>
     </p>
   </a>
 </li>
@@ -42,18 +43,18 @@
   </a>
 </li>
 <li class="nav-item">
-  <a href="{$smarty.const.ADDRESS_CMS}template/" class="nav-link">
-    <i class="nav-icon fas fa-file-code fa-fw"></i>
-    <p>
-      デザインテーマ
-    </p>
-  </a>
-</li>
-<li class="nav-item">
   <a href="{$smarty.const.ADDRESS_CMS}pageModule/" class="nav-link">
     <i class="nav-icon fas fa-pager fa-fw"></i>
     <p>
       モジュール
+    </p>
+  </a>
+</li>
+<li class="nav-item">
+  <a href="{$smarty.const.ADDRESS_CMS}template/" class="nav-link">
+    <i class="nav-icon fas fa-file-code fa-fw"></i>
+    <p>
+      ファイル
     </p>
   </a>
 </li>
