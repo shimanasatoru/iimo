@@ -317,8 +317,8 @@
     var form = new FormData();
     form.append('token', $('[name="token"]').val());
     form.append('ids',   $(this).sortable("toArray", { attribute: 'data-id' }));
-    form.append('page',  '{$data->page|default}');
-    form.append('limit', '{$data->limit|default}');
+    form.append('page',  $('body').data('page'));
+    form.append('limit', $('body').data('limit'));
     var e = {
       params: {
         type: 'POST',
@@ -388,8 +388,6 @@
     var form = new FormData();
     form.append('token', $('[name="token"]').val());
     form.append('ids',   $(this).sortable("toArray", { attribute: 'data-id' }));
-    form.append('page',  '{$data->page}');
-    form.append('limit', '{$data->limit}');
     var e = {
       params: {
         type: 'POST',
@@ -425,6 +423,7 @@
   function display(d){
     var view = $('#data');
     var row = d.row;
+    $('body').data('page', d.page).data('limit', d.limit);//page, limitはここで渡す
     if(d.rowNumber >= 0){
       view.html(null);
     }
