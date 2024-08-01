@@ -12,7 +12,6 @@ class templateController{
    * @params int $id,
    */
   public function getAction(){
-    
     $au = new \autoload;
     $params = $au->uriExplode();
     $id = filter_var($params[2], FILTER_SANITIZE_SPECIAL_CHARS, ['options' => array('default' => null)]);
@@ -38,11 +37,12 @@ class templateController{
         'options'=> array('default'=>null)
       ],
     ]);
-    $n = new templateRepository;
-    if(isset($_SESSION['site']->directory) 
-       && $_SESSION['site']->directory && $_SESSION['site']->design_authority == "original"){
-      $n->setDirectory($_SESSION['site']->directory);
+    if(!isset($_SESSION['site']) || !$_SESSION['site']->directory){
+      return false;
     }
+
+    $n = new templateRepository;
+    $n->setDirectory($_SESSION['site']->directory);
     if($params['theme']){
       $n->setDesignTheme($params['theme']);
     }
@@ -64,11 +64,6 @@ class templateController{
   }
   
   public function indexAction(){
-    if($_SESSION['site']->design_authority != "original"){
-      print "デザイン権限がありません";
-      return false;
-    }
-
     $tpl = new Smarty;
     $ut = new utilityRepository;
     $params = filter_input_array(INPUT_GET, [

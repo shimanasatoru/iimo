@@ -4,10 +4,13 @@
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1 class="m-0 font-weight-bolder">
+          <h1 class="font-weight-bolder mb-2">
             <i class="fas fa-file-code fa-fw"></i>
-            デザインテーマ
+            ファイル
           </h1>
+          <div class="text-muted small">
+            サイトに使用する各種ファイルを管理します。
+          </div>
         </div>
         <div class="col-sm-6">
           <ol class="breadcrumb small float-sm-right">
@@ -63,7 +66,9 @@
                 <thead>
                   <tr>
                     <th width="1">No</th>
-                    <th>ファイル一覧</th>
+                    <th>ファイル名</th>
+                    <th width="1">URL</th>
+                    <th width="1">サイズ/日付</th>
                   </tr>
                 </thead>
                 <tbody id="files">
@@ -101,10 +106,10 @@
           
           <div class="card">
             <div class="card-header">
-              ショートコード早見表
+              テンプレートのショートコード早見表
             </div>
-            <div class="card-body p-0">
-              <table class="table table-head-fixed text-nowrap table-striped">
+            <div class="card-body table-responsive p-0" style="max-height: 50vh">
+              <table class="table table-head-fixed table-striped">
                 <thead>
                   <tr>
                     <th width="1">ショートコード</th>
@@ -114,8 +119,8 @@
                 <tbody>
                   {foreach $smarty.session.site as $key => $value}
                   <tr>
-                    <td><kbd>&#123;$siteData->{$key}&#125;</kbd></td>
-                    <td>{$value}</td>
+                    <td class="text-nowrap"><kbd>&#123;$siteData->{$key}&#125;</kbd></td>
+                    <td class="text-muted small">{$value}</td>
                   </tr>
                   {/foreach}
                 </tbody>
@@ -376,15 +381,23 @@
       i = Number(i);
       $('<tr>'+
           '<td>'+ (i+1) +'</td>'+
-          '<td class="d-lg-flex justify-content-between">'+
+          '<td>'+
             '<a href="#" class="modal-url font-weight-bold" data-id="modal-editor" data-title="/'+ directory +'" data-url="'+ ADDRESS_CMS +'template/edit/?theme='+ theme +'&directory='+ directory +'&file='+ row[i].basename +' #content">'+
               row[i].basename +
             '</a>'+
-            '<div class="text-xs text-muted">'+ 
-              row[i].filesize + 'kb／' +
-              row[i].filedate +
-            '</div>'+
           '</td>'+
+          '<td class="text-xs text-muted">'+
+            ADDRESS_SITE + row[i].dirname + '/' + row[i].basename +
+          '</td>'+
+          '<td class="text-xs text-muted">'+
+            row[i].filesize + 'kb／' +
+            row[i].filedate +
+          '</td>'+
+        
+        
+        
+        
+        
         '</tr>'
       ).appendTo(view);
     }
