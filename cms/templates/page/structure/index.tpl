@@ -75,11 +75,11 @@
             <input type="hidden" name="id" value="" readonly>
             <input type="hidden" name="navigation_id" value="" readonly>
             <input type="hidden" name="module_id" value="" readonly>
-            <div class="col-lg form-group">
+            <div class="col-lg-4 form-group">
               <label for="moduleName">モジュール名</label>
               <input id="moduleName" type="text" name="name" class="modal-title form-control form-control-border" placeholder="モジュール名を入力" value="">
             </div>
-            <div class="col-lg-auto">
+            <div class="col-lg-8">
               <div id="append" class="row"><!--jsで追加される--></div>
             </div>
           </form>
@@ -145,6 +145,7 @@
    */
   $(document).on('click','.modal-module', function() {
     $('body').data('o_navigation_id', "");//初期化
+    $('body').data('o_navigation_limit', "");//初期化
 
     var id = $(this).data('id');
     var navigation_id = $(this).data('navigationid');
@@ -152,6 +153,7 @@
     var module_type = $(this).data('moduletype');
     var name = $(this).data('name');
     var o_navigation_id = $(this).data('onavigationid');
+    var o_navigation_limit = $(this).data('onavigationlimit');
     var release_kbn = $(this).data('releasekbn');
     var release_start_date = $(this).data('releasestartdate');
     var release_end_date = $(this).data('releaseenddate');
@@ -166,6 +168,7 @@
     $('#moduleModal form [name="module_id"]').val(module_id);
     $('#moduleModal form [name="name"]').val(name);
     $('body').data('o_navigation_id', o_navigation_id);//bodyで渡す
+    $('body').data('o_navigation_limit', o_navigation_limit);//bodyで渡す
     $('body').data('release_kbn', release_kbn);//bodyで渡す
     $('body').data('release_start_date', release_start_date);//bodyで渡す
     $('body').data('release_end_date', release_end_date);//bodyで渡す
@@ -230,6 +233,7 @@
       return false;
     }
     var option = selectNavigationTree(e.row);
+    var o_navigation_limit = $('body').data('o_navigation_limit');
     var release_start_date = $('body').data('release_start_date');
     var release_end_date = $('body').data('release_end_date');
     var release_kbn = $('body').data('release_kbn');
@@ -244,22 +248,26 @@
         release_select += '>下書き</option>';
     
     $('#moduleModal form #append').append(
-      '<div class="col-4 form-group">' +
-        '<label for="selectNavigation">使用するナビゲーション</label>' +
+      '<div class="col-3 form-group">' +
+        '<label for="selectNavigation">使用するナビ</label>' +
         '<select id="selectNavigation" name="o_navigation_id" class="form-control form-control-border">' + option + '</select>' +
       '</div>' +
       '<div class="col-2 form-group">' +
+        '<label for="selectNavigation">ナビ取得件数</label>' +
+        '<input type="number" name="o_navigation_limit" placeholder="件数" class="form-control" value="'+ o_navigation_limit +'">' +
+      '</div>' +
+      '<div class="col form-group">' +
         '<label>公開</label>' +
         '<select name="release_kbn" class="form-control form-control-border">' +
           release_select +
         '</select>' +
       '</div>' +
-      '<div class="col-3 form-group">' +
-        '<label>公開開始日</label>' +
+      '<div class="col form-group">' +
+        '<label>公開開始</label>' +
         '<input type="date" name="release_start_date" placeholder="公開開始日" class="form-control" value="'+ release_start_date +'" data-inputmask-alias="datetime" data-inputmask-inputformat="yyyy/mm/dd" data-mask>' +
       '</div>' +
-      '<div class="col-3 form-group">' +
-        '<label>公開終了日</label>' +
+      '<div class="col form-group">' +
+        '<label>公開終了</label>' +
         '<input type="date" name="release_end_date" placeholder="公開終了日" class="form-control" value="'+ release_end_date +'" data-inputmask-alias="datetime" data-inputmask-inputformat="yyyy/mm/dd" data-mask>' +
       '</div>'
     );
@@ -452,6 +460,7 @@
             'data-moduletype="'+ row[i].module_type +'" '+
             'data-name="'+ row[i].name +'" '+
             'data-onavigationid="'+ row[i].o_navigation_id +'" '+
+            'data-onavigationlimit="'+ row[i].o_navigation_limit +'" '+
             'data-releasekbn="'+ row[i].release_kbn +'" '+
             'data-releasestartdate="'+ row[i].release_start_date +'" '+
             'data-releaseenddate="'+ row[i].release_end_date +'" '+
