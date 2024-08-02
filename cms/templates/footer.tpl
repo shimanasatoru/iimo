@@ -4,10 +4,71 @@
     {if $smarty.capture.main_footer}{$smarty.capture.main_footer}
     {else}<div class="small p-2">© 2021 {$smarty.const.SERVICE_NAME}</div>
     {/if}
+    {*-- サポートの案内 --*}
+    <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill position-absolute" style="top: -3rem; right: 8px" data-toggle="modal" data-target="#supportModal">
+      <i class="fas fa-headset"></i> サポートが必要？
+    </button>
+    {*-- /サポートの案内 --*}
   </footer>
   <aside id="control-sidebar" class="control-sidebar control-sidebar-dark">
     <!-- Control sidebar content goes here -->
   </aside>
+
+  {*-- サポートの案内 --*}
+  <div class="modal fade" id="supportModal" tabindex="-1" role="dialog" aria-labelledby="supportModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="supportModalLabel">サポート窓口のご案内</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <h6>技術的なお問い合わせは、下記サポート方法をご利用ください。</h6>
+          <div class="table-responsive">
+            <table class="table text-nowrap">
+              <tbody>
+                <tr>
+                  <th>サポート会社</th>
+                  <th>株式会社 アドダス</th>
+                </tr>
+                <tr>
+                  <th>対応日時</th>
+                  <td>11時～18時（土・日・祝日 休）</td>
+                </tr>
+                <tr>
+                  <th>お電話サポート</th>
+                  <td><a href="tel:0120-310-755" class="btn btn-success">0120-310-755</a></td>
+                </tr>
+                <tr>
+                  <th>LINEサポート</th>
+                  <td>
+                    <img src="https://qr-official.line.me/gs/M_grd4053y_GW.png?oat_content=qr" style="width: 80px; height: auto">
+                    <a href="https://lin.ee/p19jUPe"><img src="https://scdn.line-apps.com/n/line_add_friends/btn/ja.png" alt="友だち追加" height="36" border="0"></a>
+                  </td>
+                </tr>
+                <tr>
+                  <th>お役立ち情報</th>
+                  <td class="text-wrap">
+                    <a href="https://addas.jp/category/blog/" target="_blank">
+                      ウェブに関する最新の動向、補助金などお役立ち情報を配信
+                    </a>
+                  </td>
+                </tr>
+              </tbody>
+              <tfoot>
+              </tfoot>
+            </table>          
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">閉じる</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  {*-- /サポートの案内 --*}
 
   {* 全ページ使用のモーダル *}
   <div class="modal fade" id="modal-1" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
