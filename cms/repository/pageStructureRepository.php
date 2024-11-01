@@ -68,6 +68,9 @@ class pageStructureRepository extends dbRepository {
           $page = new pageRepository;
           $page->setSiteId($d->site_id);
           $page->setNavigationId($d->o_navigation_id);
+          if($d->o_navigation_limit){
+            $page->setLimit($d->o_navigation_limit);
+          }
           if($preview_page_post = self::getPreviewPagePost()){
             $page->setPreviewPost($preview_page_post);//途中プレビューページポスト値を取得
           }else{
