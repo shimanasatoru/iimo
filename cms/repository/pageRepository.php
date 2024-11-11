@@ -406,6 +406,17 @@ class pageRepository extends dbRepository {
   }
 
   public function push(){
+    
+    //post容量チェック
+    ini_set('upload_max_filesize', '300M');
+    ini_set('post_max_size', '300M');
+    
+    $max_size = 300 * 1024 * 1024;
+    $post_size = $_SERVER['CONTENT_LENGTH'];
+    if ($post_size > $max_size) {
+      $this->set_message('1度にアップロードできる容量を超えました。分割してアップロードしてください。');
+    }
+
     $push = $this->getPost();
     $ut = new utilityRepository;
     if(!$push['site_id']){
