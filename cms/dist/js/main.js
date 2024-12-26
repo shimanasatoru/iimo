@@ -103,6 +103,14 @@ $(document).on('click','.modal-url', function(){
   }
   modalUrl(id, title, url, footer_class, done);
 });
+/*
+ * モーダルクローズ時 エラー対策を追加（20241227）
+ */
+$(document).on('hide.bs.modal', function () {
+  if (document.activeElement) {
+    document.activeElement.blur();
+  }
+});
 function modalUrl(id, title, url, footer_class, done){
   if(!id){
     alert('IDがありません。');
