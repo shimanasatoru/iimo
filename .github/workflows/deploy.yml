@@ -1,0 +1,33 @@
+name: Deploy to Sakura Managed Server
+on:
+  push:
+    branches:
+      - dev
+    paths-ignore:
+      - '.github/'
+      - 'README.md'
+      - 'config/config.php'
+      - '.htaccess'
+      - 'vendor/'
+      - 'library/'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Deploy
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./  # ローカルのディレクトリ
+          server-dir: /www/dev/  # サーバー上のディレクトリ
+          protocol: ftp
+          port: 21
+          log-level: verbose
+          passive: false
+          dangerous-clean-slate: false # 注意設定（既存ファイルが除去される）
