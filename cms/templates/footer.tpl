@@ -1,4 +1,4 @@
-
+<!-- footer -->
   <!-- Main Footer -->
   <footer class="main-footer p-0">
     {if $smarty.capture.main_footer}{$smarty.capture.main_footer}
