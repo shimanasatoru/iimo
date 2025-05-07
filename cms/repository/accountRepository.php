@@ -206,6 +206,13 @@ class accountRepository extends dbRepository {
         .self::getPageLimit();
     try {
       self::connect();
+      
+      // group_concat_max_len 変更
+      $new_max_len = 1024 * 1024 * 16; // 例：1MB * 16 = 16MB に設定
+      $stmt = self::prepare("SET SESSION group_concat_max_len = :max_len");
+      $stmt->bindParam(':max_len', $new_max_len, \PDO::PARAM_INT);
+      $stmt->execute();
+
       $stmt = self::prepare($q);
       $stmt->execute(self::getValue());
       while($d = $stmt->fetch(\PDO::FETCH_OBJ)){
